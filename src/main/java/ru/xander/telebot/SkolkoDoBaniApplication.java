@@ -6,7 +6,6 @@ import org.telegram.telegrambots.ApiContextInitializer;
 
 /**
  * @author Alexander Shakhov
- * @since 1.0
  */
 @SpringBootApplication
 public class SkolkoDoBaniApplication {
