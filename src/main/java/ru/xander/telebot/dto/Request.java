@@ -2,7 +2,9 @@ package ru.xander.telebot.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.Objects;
 
@@ -16,10 +18,28 @@ public class Request {
     private Long chatId;
     private Integer userId;
     private String rawMessage;
+    private Integer botUserId;
     private Long botChatId;
+    private Integer superUserId;
 
     public boolean isBotChat() {
         return Objects.equals(chatId, botChatId);
+    }
+
+    public boolean isSuperUser() {
+        return Objects.equals(message.getFrom().getId(), superUserId);
+    }
+
+    public boolean isReplyToBot() {
+        Message replyToMessage = message.getReplyToMessage();
+        if (replyToMessage == null) {
+            return false;
+        }
+        return replyToMessage.getFrom().getId().equals(botUserId);
+    }
+
+    public Integer getMessageId() {
+        return message.getMessageId();
     }
 
     public String getStickerId() {
@@ -27,5 +47,18 @@ public class Request {
             return null;
         }
         return message.getSticker().getFileId();
+    }
+
+    public String getUserName() {
+        return message.getFrom().getUserName();
+    }
+
+    public String getUserFullName() {
+        User user = message.getFrom();
+        String fullName = user.getFirstName();
+        if (!StringUtils.isEmpty(user.getLastName())) {
+            fullName = fullName.concat(" ").concat(user.getLastName());
+        }
+        return fullName;
     }
 }

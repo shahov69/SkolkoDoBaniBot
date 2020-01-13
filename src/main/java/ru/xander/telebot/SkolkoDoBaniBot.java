@@ -26,8 +26,12 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     private String botUsername;
     @Value("${telegram.bot.token}")
     private String botToken;
+    @Value("${telegram.bot.userId}")
+    private Integer botUserId;
     @Value("${telegram.bot.chatId}")
     private Long botChatId;
+    @Value("${telegram.bot.superUserId}")
+    private Integer botSuperUserId;
 
     private final ActionService actionService;
 
@@ -77,7 +81,9 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
         request.setUserId(user.getId());
         request.setChatId(chat.getId());
         request.setRawMessage(message.getText());
+        request.setBotUserId(botUserId);
         request.setBotChatId(botChatId);
+        request.setSuperUserId(botSuperUserId);
         return request;
     }
 }
