@@ -1,6 +1,6 @@
 package ru.xander.telebot.action;
 
-import ru.xander.telebot.util.Request;
+import ru.xander.telebot.dto.Request;
 
 /**
  * @author Alexander Shakhov

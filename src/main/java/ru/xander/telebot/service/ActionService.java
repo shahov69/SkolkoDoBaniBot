@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
+import ru.xander.telebot.action.DocumentAction;
 import ru.xander.telebot.action.FirstTimeAction;
+import ru.xander.telebot.action.PhotoAction;
+import ru.xander.telebot.action.StickerAction;
 import ru.xander.telebot.action.UnknownAction;
+import ru.xander.telebot.action.VideoAction;
 
 import java.util.List;
 import java.util.Map;
@@ -41,11 +46,31 @@ public class ActionService {
             return actionMap.get(FirstTimeAction.class);
         }
         if (message.getChatId().equals(botChatId)) {
-
+            return getAdminAction(message);
         } else {
-            return actionMap.get(UnknownAction.class);
+            return getUserAction();
+        }
+    }
+
+    private Action getAdminAction(Message message) {
+        if (message.getSticker() != null) {
+            return actionMap.get(StickerAction.class);
+        }
+        if (message.getVideo() != null) {
+            return actionMap.get(VideoAction.class);
+        }
+        if (message.getDocument() != null) {
+            return actionMap.get(DocumentAction.class);
+        }
+        List<PhotoSize> photo = message.getPhoto();
+        if (photo != null && !photo.isEmpty()) {
+            return actionMap.get(PhotoAction.class);
         }
         return null;
+    }
+
+    private Action getUserAction() {
+        return actionMap.get(UnknownAction.class);
     }
 
     private boolean firstTimeChecked = false;

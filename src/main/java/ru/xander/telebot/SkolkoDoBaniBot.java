@@ -3,11 +3,14 @@ package ru.xander.telebot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.xander.telebot.action.Action;
+import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.service.ActionService;
+import ru.xander.telebot.service.SenderService;
 
 /**
  * @author Alexander Shakhov
@@ -33,7 +36,8 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Action action = actionService.resolveAction(update);
         if (action != null) {
-            action.execute(null);
+            Request request = Request.fromUpdate(update);
+            action.execute(request);
         }
     }
 
@@ -51,6 +55,11 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return botToken;
+    }
+
+    @Bean
+    public SenderService getSenderService() {
+        return new SenderService(this);
     }
 
 }
