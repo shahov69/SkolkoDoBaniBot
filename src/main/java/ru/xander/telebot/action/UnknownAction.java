@@ -6,7 +6,7 @@ import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Setting;
 import ru.xander.telebot.repository.SettingRepo;
-import ru.xander.telebot.service.SenderService;
+import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
 import static ru.xander.telebot.dto.SettingName.TEXT_UNKNOWN;
@@ -40,12 +40,10 @@ public class UnknownAction implements Action {
     };
 
     @Autowired
-    private SenderService sender;
-    @Autowired
     private SettingRepo settingRepo;
 
     @Override
-    public void execute(Request request) {
+    public void execute(Request request, Sender sender) {
         if (request.isSuperUser()) {
             sender.sendSticker(request.getChatId(), "CAADAgADGAAD5NdGDj8TYTfHnZ7gAg");
         } else {

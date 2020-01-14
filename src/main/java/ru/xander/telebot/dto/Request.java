@@ -15,15 +15,13 @@ import java.util.Objects;
 @Setter
 public class Request {
     private Message message;
-    private Long chatId;
-    private Integer userId;
     private String rawMessage;
     private Integer botUserId;
     private Long botChatId;
     private Integer superUserId;
 
     public boolean isBotChat() {
-        return Objects.equals(chatId, botChatId);
+        return Objects.equals(getChatId(), botChatId);
     }
 
     public boolean isSuperUser() {
@@ -40,6 +38,14 @@ public class Request {
 
     public Integer getMessageId() {
         return message.getMessageId();
+    }
+
+    public Integer getUserId() {
+        return message.getFrom().getId();
+    }
+
+    public Long getChatId() {
+        return message.getChat().getId();
     }
 
     public String getStickerId() {

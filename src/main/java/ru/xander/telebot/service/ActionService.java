@@ -15,6 +15,8 @@ import ru.xander.telebot.action.PhotoAction;
 import ru.xander.telebot.action.StickerAction;
 import ru.xander.telebot.action.UnknownAction;
 import ru.xander.telebot.action.VideoAction;
+import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.util.Sender;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,8 @@ public class ActionService {
     private Integer botUserId;
     @Value("${telegram.bot.chatId}")
     private Long botChatId;
+    @Value("${telegram.bot.superUserId}")
+    private Integer botSuperUserId;
 
     private final Map<Class<? extends Action>, Action> actionMap;
 
@@ -40,19 +44,28 @@ public class ActionService {
         this.actionMap = actionList.stream().collect(Collectors.toMap(Action::getClass, a -> a));
     }
 
-    public Action resolveAction(Update update) {
+    public void process(Update update, Sender sender) {
+        Action action = resolveAction(update);
+        if (action != null) {
+            log.debug("Execute action {}", action.getClass().getSimpleName());
+            Request request = prepareRequest(update);
+            action.execute(request, sender);
+        }
+    }
+
+    private Action resolveAction(Update update) {
         Message message = update.getMessage();
         if (isFirstTime(message)) {
             return actionMap.get(FirstTimeAction.class);
         }
         if (message.getChatId().equals(botChatId)) {
-            return getAdminAction(message);
+            return resolveAdminAction(message);
         } else {
-            return getUserAction();
+            return resolveUserAction();
         }
     }
 
-    private Action getAdminAction(Message message) {
+    private Action resolveAdminAction(Message message) {
         if (message.getSticker() != null) {
             return actionMap.get(StickerAction.class);
         }
@@ -69,7 +82,7 @@ public class ActionService {
         return null;
     }
 
-    private Action getUserAction() {
+    private Action resolveUserAction() {
         return actionMap.get(UnknownAction.class);
     }
 
@@ -88,5 +101,16 @@ public class ActionService {
             }
         }
         return false;
+    }
+
+    private Request prepareRequest(Update update) {
+        final Message message = update.getMessage();
+        Request request = new Request();
+        request.setMessage(message);
+        request.setRawMessage(message.getText());
+        request.setBotUserId(botUserId);
+        request.setBotChatId(botChatId);
+        request.setSuperUserId(botSuperUserId);
+        return request;
     }
 }

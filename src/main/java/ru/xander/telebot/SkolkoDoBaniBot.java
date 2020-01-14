@@ -3,17 +3,12 @@ package ru.xander.telebot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import ru.xander.telebot.action.Action;
-import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.service.ActionService;
-import ru.xander.telebot.service.SenderService;
+import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.util.TelegramSender;
 
 /**
  * @author Alexander Shakhov
@@ -26,28 +21,20 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     private String botUsername;
     @Value("${telegram.bot.token}")
     private String botToken;
-    @Value("${telegram.bot.userId}")
-    private Integer botUserId;
-    @Value("${telegram.bot.chatId}")
-    private Long botChatId;
-    @Value("${telegram.bot.superUserId}")
-    private Integer botSuperUserId;
 
     private final ActionService actionService;
+    private final Sender sender;
 
     @Autowired
     public SkolkoDoBaniBot(ActionService actionService) {
         log.info("Start bot...");
         this.actionService = actionService;
+        this.sender = new TelegramSender(this);
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        Action action = actionService.resolveAction(update);
-        if (action != null) {
-            Request request = fromUpdate(update);
-            action.execute(request);
-        }
+        actionService.process(update, sender);
     }
 
     @Override
@@ -66,24 +53,4 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
         return botToken;
     }
 
-    @Bean
-    public SenderService getSenderService() {
-        return new SenderService(this);
-    }
-
-    private Request fromUpdate(Update update) {
-        final Message message = update.getMessage();
-        final Chat chat = message.getChat();
-        final User user = message.getFrom();
-
-        Request request = new Request();
-        request.setMessage(message);
-        request.setUserId(user.getId());
-        request.setChatId(chat.getId());
-        request.setRawMessage(message.getText());
-        request.setBotUserId(botUserId);
-        request.setBotChatId(botChatId);
-        request.setSuperUserId(botSuperUserId);
-        return request;
-    }
 }
