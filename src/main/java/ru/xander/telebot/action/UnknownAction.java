@@ -9,6 +9,8 @@ import ru.xander.telebot.repository.SettingRepo;
 import ru.xander.telebot.service.SenderService;
 import ru.xander.telebot.util.Utils;
 
+import static ru.xander.telebot.dto.SettingName.TEXT_UNKNOWN;
+
 /**
  * @author Alexander Shakhov
  */
@@ -47,7 +49,7 @@ public class UnknownAction implements Action {
         if (request.isSuperUser()) {
             sender.sendSticker(request.getChatId(), "CAADAgADGAAD5NdGDj8TYTfHnZ7gAg");
         } else {
-            Setting textUnknown = settingRepo.findByName("text_unknown");
+            Setting textUnknown = settingRepo.findByName(TEXT_UNKNOWN);
             if (Utils.isHappyBirthDay()) {
                 if (request.isReplyToBot()) {
                     if (Utils.randomBoolean()) {
