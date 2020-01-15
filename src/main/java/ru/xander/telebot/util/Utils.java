@@ -2,6 +2,9 @@ package ru.xander.telebot.util;
 
 import ru.xander.telebot.dto.Request;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
@@ -44,5 +47,17 @@ public abstract class Utils {
     public static boolean isHappyBirthNextDay() {
         LocalDate localDate = Instant.now().atZone(ZONE_ID_MOSCOW).toLocalDate();
         return (localDate.getMonth() == Month.FEBRUARY) && (localDate.getDayOfMonth() == 17);
+    }
+
+    public static String stackTraceToString(Throwable throwable) {
+        try (
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter writer = new PrintWriter(stringWriter)
+        ) {
+            throwable.printStackTrace(writer);
+            return stringWriter.toString();
+        } catch (IOException e) {
+            return "getStackTrace exception: " + e.getMessage();
+        }
     }
 }

@@ -13,6 +13,7 @@ import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminVideoAction;
+import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
 import ru.xander.telebot.action.UnknownAction;
 import ru.xander.telebot.dto.Request;
@@ -45,11 +46,18 @@ public class ActionService {
     }
 
     public void process(Update update, Sender sender) {
-        Action action = resolveAction(update);
-        if (action != null) {
-            log.debug("Execute action {}", action.getClass().getSimpleName());
-            Request request = prepareRequest(update);
-            action.execute(request, sender);
+        try {
+            Action action = resolveAction(update);
+            if (action != null) {
+                log.debug("Execute action {}", action.getClass().getSimpleName());
+                Request request = prepareRequest(update);
+                action.execute(request, sender);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            ((ExceptionActon) actionMap.get(ExceptionActon.class))
+                    .setException(e)
+                    .execute(prepareRequest(update), sender);
         }
     }
 
@@ -61,7 +69,7 @@ public class ActionService {
         if (message.getChatId().equals(botChatId)) {
             return resolveAdminAction(message);
         } else {
-            return resolveUserAction();
+            return resolveUserAction(message);
         }
     }
 
