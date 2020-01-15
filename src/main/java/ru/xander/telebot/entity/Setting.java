@@ -2,6 +2,7 @@ package ru.xander.telebot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 import ru.xander.telebot.dto.SettingName;
 
 import javax.persistence.Entity;
@@ -29,4 +30,18 @@ public class Setting {
     private SettingName name;
     private String value;
     private String defaultValue;
+
+    public Integer getValueAsInt() {
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return Integer.parseInt(value);
+    }
+
+    public Long getValueAsLong() {
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return Long.parseLong(value);
+    }
 }

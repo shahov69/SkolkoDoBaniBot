@@ -15,6 +15,8 @@ import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
+import ru.xander.telebot.action.PictureAction;
+import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.util.Sender;
@@ -67,10 +69,12 @@ public class ActionService {
             return actionMap.get(FirstTimeAction.class);
         }
         if (message.getChatId().equals(botChatId)) {
-            return resolveAdminAction(message);
-        } else {
-            return resolveUserAction(message);
+            Action adminAction = resolveAdminAction(message);
+            if (adminAction != null) {
+                return adminAction;
+            }
         }
+        return resolveUserAction(message);
     }
 
     private Action resolveAdminAction(Message message) {
@@ -90,7 +94,21 @@ public class ActionService {
         return null;
     }
 
-    private Action resolveUserAction() {
+    private Action resolveUserAction(Message message) {
+        if (message.getVideo() != null) {
+            return actionMap.get(SetPictureAction.class);
+        }
+        if (message.getDocument() != null) {
+            return actionMap.get(SetPictureAction.class);
+        }
+        List<PhotoSize> photo = message.getPhoto();
+        if (photo != null && !photo.isEmpty()) {
+            return actionMap.get(SetPictureAction.class);
+        }
+        String actionName = prepareActionName(message.getText());
+        if ("/pikcha".equals(actionName)) {
+            return actionMap.get(PictureAction.class);
+        }
         return actionMap.get(UnknownAction.class);
     }
 
@@ -120,5 +138,13 @@ public class ActionService {
         request.setBotChatId(botChatId);
         request.setSuperUserId(botSuperUserId);
         return request;
+    }
+
+    private String prepareActionName(String text) {
+        int firstSpace = text.indexOf(' ');
+        if (firstSpace > 0) {
+            return text.substring(0, firstSpace).trim().toLowerCase();
+        }
+        return text.trim().toLowerCase();
     }
 }
