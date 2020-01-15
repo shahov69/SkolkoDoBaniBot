@@ -8,7 +8,7 @@ import ru.xander.telebot.util.Sender;
  * @author Alexander Shakhov
  */
 @Component
-public class StickerAction implements Action {
+public class AdminStickerAction implements Action {
     @Override
     public void execute(Request request, Sender sender) {
         if (request.isBotChat()) {

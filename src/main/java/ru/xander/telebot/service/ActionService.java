@@ -9,12 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
-import ru.xander.telebot.action.DocumentAction;
+import ru.xander.telebot.action.AdminDocumentAction;
+import ru.xander.telebot.action.AdminPhotoAction;
+import ru.xander.telebot.action.AdminStickerAction;
+import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.FirstTimeAction;
-import ru.xander.telebot.action.PhotoAction;
-import ru.xander.telebot.action.StickerAction;
 import ru.xander.telebot.action.UnknownAction;
-import ru.xander.telebot.action.VideoAction;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.util.Sender;
 
@@ -67,17 +67,17 @@ public class ActionService {
 
     private Action resolveAdminAction(Message message) {
         if (message.getSticker() != null) {
-            return actionMap.get(StickerAction.class);
+            return actionMap.get(AdminStickerAction.class);
         }
         if (message.getVideo() != null) {
-            return actionMap.get(VideoAction.class);
+            return actionMap.get(AdminVideoAction.class);
         }
         if (message.getDocument() != null) {
-            return actionMap.get(DocumentAction.class);
+            return actionMap.get(AdminDocumentAction.class);
         }
         List<PhotoSize> photo = message.getPhoto();
         if (photo != null && !photo.isEmpty()) {
-            return actionMap.get(PhotoAction.class);
+            return actionMap.get(AdminPhotoAction.class);
         }
         return null;
     }

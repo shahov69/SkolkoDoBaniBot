@@ -71,4 +71,8 @@ public class Request {
         }
         return fullName;
     }
+
+    public String getCaption() {
+        return message.getCaption();
+    }
 }
