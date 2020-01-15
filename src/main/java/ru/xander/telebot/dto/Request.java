@@ -48,6 +48,10 @@ public class Request {
         return message.getChat().getId();
     }
 
+    public String getChatTitle() {
+        return message.getChat().getTitle();
+    }
+
     public String getStickerId() {
         if (message.getSticker() == null) {
             return null;

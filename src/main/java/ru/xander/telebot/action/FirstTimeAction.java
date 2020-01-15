@@ -1,7 +1,10 @@
 package ru.xander.telebot.action;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.entity.Banya;
+import ru.xander.telebot.repository.BanyaRepo;
 import ru.xander.telebot.util.Sender;
 
 /**
@@ -9,8 +12,19 @@ import ru.xander.telebot.util.Sender;
  */
 @Component
 public class FirstTimeAction implements Action {
+    @Autowired
+    private BanyaRepo banyaRepo;
+
     @Override
     public void execute(Request request, Sender sender) {
-        sender.sendText(0L, "First Time Action");
+        Banya banya = new Banya();
+        banya.setChatId(request.getChatId());
+        banya.setChatName(request.getChatTitle());
+        banya = banyaRepo.save(banya);
+
+        String message = String.format(
+                "Bot installed to chat %d (%s)\nCreated banya instance with id = %d",
+                request.getChatId(), request.getChatTitle(), banya.getId());
+        sender.sendText(request.getBotChatId(), message);
     }
 }

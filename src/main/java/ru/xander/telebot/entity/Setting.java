@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Alexander Shakhov
@@ -23,6 +24,7 @@ public class Setting {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "setting_seq")
     @SequenceGenerator(name = "setting_seq", sequenceName = "setting_sequence", allocationSize = 1)
     private Long id;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private SettingName name;
     private String value;
