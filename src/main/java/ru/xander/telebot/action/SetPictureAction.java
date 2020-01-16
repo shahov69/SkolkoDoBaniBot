@@ -23,10 +23,14 @@ import static ru.xander.telebot.dto.SettingName.TEXT_PICTURE_SET;
  */
 @Component
 public class SetPictureAction implements Action {
+    private final SettingService settingService;
+    private final BanyaService banyaService;
+
     @Autowired
-    private SettingService settingService;
-    @Autowired
-    private BanyaService banyaService;
+    public SetPictureAction(SettingService settingService, BanyaService banyaService) {
+        this.settingService = settingService;
+        this.banyaService = banyaService;
+    }
 
     @Override
     public void execute(Request request, Sender sender) {

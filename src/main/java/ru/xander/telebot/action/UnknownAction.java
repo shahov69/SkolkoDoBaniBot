@@ -39,8 +39,12 @@ public class UnknownAction implements Action {
             "CAADBAADKwADmDVxAmIdrKk5BjVdAg"
     };
 
+    private final SettingService settingService;
+
     @Autowired
-    private SettingService settingService;
+    public UnknownAction(SettingService settingService) {
+        this.settingService = settingService;
+    }
 
     @Override
     public void execute(Request request, Sender sender) {

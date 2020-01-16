@@ -13,6 +13,10 @@ public enum SettingName {
      */
     ADMIN_ID,
     /**
+     * Стикер для приветствия
+     */
+    STICKER_HELLO,
+    /**
      * Стикер при успешной установке картинки
      */
     STICKER_PICTURE_SET,

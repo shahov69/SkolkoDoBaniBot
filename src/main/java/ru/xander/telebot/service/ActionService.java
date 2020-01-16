@@ -15,6 +15,7 @@ import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
+import ru.xander.telebot.action.HelloActiton;
 import ru.xander.telebot.action.HowMuchAction;
 import ru.xander.telebot.action.PictureAction;
 import ru.xander.telebot.action.SetBanyaTimeAction;
@@ -110,6 +111,8 @@ public class ActionService {
         }
         final String actionName = prepareActionName(message.getText());
         switch (actionName) {
+            case "/hello":
+                return actionMap.get(HelloActiton.class);
             case "/howmuch":
                 return actionMap.get(HowMuchAction.class);
             case "/pikcha":

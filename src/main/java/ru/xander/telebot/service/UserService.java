@@ -1,0 +1,38 @@
+package ru.xander.telebot.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.entity.User;
+import ru.xander.telebot.repository.UserRepo;
+
+import java.util.Optional;
+
+/**
+ * @author Alexander Shakhov
+ */
+@Service
+public class UserService {
+    private final UserRepo userRepo;
+
+    @Autowired
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public User save(Request request) {
+        org.telegram.telegrambots.meta.api.objects.User telegramUser = request.getMessage().getFrom();
+        Optional<User> userOptional = userRepo.findById(telegramUser.getId());
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        }
+        User user = new User();
+        user.setId(telegramUser.getId());
+        user.setFirstName(telegramUser.getFirstName());
+        user.setLastName(telegramUser.getLastName());
+        user.setUserName(telegramUser.getUserName());
+        user.setIsBot(telegramUser.getBot());
+        user.setLangCode(telegramUser.getLanguageCode());
+        return userRepo.save(user);
+    }
+}

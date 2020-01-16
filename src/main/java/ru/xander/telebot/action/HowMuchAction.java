@@ -18,10 +18,14 @@ import static ru.xander.telebot.dto.SettingName.*;
  */
 @Component
 public class HowMuchAction implements Action {
+    private final SettingService settingService;
+    private final BanyaService banyaService;
+
     @Autowired
-    private SettingService settingService;
-    @Autowired
-    private BanyaService banyaService;
+    public HowMuchAction(SettingService settingService, BanyaService banyaService) {
+        this.settingService = settingService;
+        this.banyaService = banyaService;
+    }
 
     @SuppressWarnings("DuplicatedCode")
     @Override

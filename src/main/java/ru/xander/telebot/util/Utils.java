@@ -1,19 +1,23 @@
 package ru.xander.telebot.util;
 
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.dto.TimeOfDay;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * @author Alexander Shakhov
@@ -75,6 +79,23 @@ public abstract class Utils {
                 .format(date);
     }
 
+    public static TimeOfDay getTimeOfDay() {
+        return getTimeOfDay(now());
+    }
+
+    public static TimeOfDay getTimeOfDay(Instant instant) {
+        int hour = LocalDateTime.ofInstant(instant, ZONE_ID_MOSCOW).getHour();
+        if (hour < 6) {
+            return TimeOfDay.NIGHT;
+        } else if (hour < 12) {
+            return TimeOfDay.MORNING;
+        } else if (hour < 18) {
+            return TimeOfDay.AFTERNOON;
+        } else {
+            return TimeOfDay.EVENING;
+        }
+    }
+
     public static String formatBanyaTime(String template, long nanos) {
         long totalSeconds = nanos / 1_000_000_000;
         long seconds = totalSeconds % 60;
@@ -109,6 +130,14 @@ public abstract class Utils {
             return stringWriter.toString();
         } catch (IOException e) {
             return "getStackTrace exception: " + e.getMessage();
+        }
+    }
+
+    public static void tryWithResource(String resourceName, Consumer<InputStream> resourceConsumer) {
+        try (InputStream resource = Utils.class.getResourceAsStream(resourceName)) {
+            resourceConsumer.accept(resource);
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 }

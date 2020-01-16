@@ -12,8 +12,12 @@ import ru.xander.telebot.util.Sender;
  */
 @Component
 public class FirstTimeAction implements Action {
+    private final BanyaService banyaService;
+
     @Autowired
-    private BanyaService banyaService;
+    public FirstTimeAction(BanyaService banyaService) {
+        this.banyaService = banyaService;
+    }
 
     @Override
     public void execute(Request request, Sender sender) {
