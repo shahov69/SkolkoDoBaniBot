@@ -26,7 +26,18 @@ public class BanyaService {
     }
 
     public Banya getBanya(Request request) {
-        return banyaRepo.findByChatId(request.getChatId());
+        return getBanya(request, false);
+    }
+
+    public Banya getBanya(Request request, boolean createIfNotExists) {
+        Banya banya = banyaRepo.findByChatId(request.getChatId());
+        if (createIfNotExists && (banya == null)) {
+            banya = new Banya();
+            banya.setChatId(request.getChatId());
+            banya.setChatName(request.getChatTitle());
+            return banyaRepo.save(banya);
+        }
+        return banya;
     }
 
     public Banya getBanyaForActiveChat(Request request) {

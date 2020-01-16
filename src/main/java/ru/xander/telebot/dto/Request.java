@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
+import ru.xander.telebot.util.Utils;
 
 import java.util.Objects;
 
@@ -74,5 +75,17 @@ public class Request {
 
     public String getCaption() {
         return message.getCaption();
+    }
+
+    public String[] getArgs() {
+        String text = message.getText();
+        if (text == null) {
+            return Utils.EMPTY_STRING_ARRAY;
+        }
+        int firstSpace = text.trim().indexOf(' ');
+        if (firstSpace < 0) {
+            return Utils.EMPTY_STRING_ARRAY;
+        }
+        return text.substring(firstSpace + 1).split(" ");
     }
 }

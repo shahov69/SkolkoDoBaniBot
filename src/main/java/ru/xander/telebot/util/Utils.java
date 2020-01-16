@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -17,7 +20,9 @@ import java.util.Random;
  */
 public abstract class Utils {
 
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
+    private static final Locale LOCALE_RU = Locale.forLanguageTag("RU");
     private static final Random random = new Random(Long.MAX_VALUE);
 
     private Utils() {
@@ -56,6 +61,18 @@ public abstract class Utils {
 
     public static Instant now() {
         return Instant.now(Clock.system(ZONE_ID_MOSCOW));
+    }
+
+    public static Instant parseDate(String date, String format) {
+        return Instant.from(DateTimeFormatter.ofPattern(format).withZone(ZONE_ID_MOSCOW).parse(date));
+    }
+
+    public static String formatDate(TemporalAccessor date, String format) {
+        return DateTimeFormatter
+                .ofPattern(format)
+                .withLocale(LOCALE_RU)
+                .withZone(ZONE_ID_MOSCOW)
+                .format(date);
     }
 
     public static String formatBanyaTime(String template, long nanos) {

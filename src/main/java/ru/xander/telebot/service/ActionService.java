@@ -17,8 +17,10 @@ import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
 import ru.xander.telebot.action.HowMuchAction;
 import ru.xander.telebot.action.PictureAction;
+import ru.xander.telebot.action.SetBanyaTimeAction;
 import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
+import ru.xander.telebot.action.UnsetBanyaTimeAction;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.util.Sender;
 
@@ -112,6 +114,10 @@ public class ActionService {
                 return actionMap.get(HowMuchAction.class);
             case "/pikcha":
                 return actionMap.get(PictureAction.class);
+            case "/set":
+                return actionMap.get(SetBanyaTimeAction.class);
+            case "/unset":
+                return actionMap.get(UnsetBanyaTimeAction.class);
         }
         return actionMap.get(UnknownAction.class);
     }
