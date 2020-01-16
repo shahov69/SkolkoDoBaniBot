@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Video;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
 import ru.xander.telebot.repository.BanyaRepo;
-import ru.xander.telebot.repository.SettingRepo;
+import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 
 import java.util.Comparator;
@@ -24,14 +24,14 @@ import static ru.xander.telebot.dto.SettingName.TEXT_PICTURE_SET;
 @Component
 public class SetPictureAction implements Action {
     @Autowired
-    private SettingRepo settingRepo;
+    private SettingService settingService;
     @Autowired
     private BanyaRepo banyaRepo;
 
     @Override
     public void execute(Request request, Sender sender) {
         if (isSetPikcha(request.getCaption())) {
-            if (checkPermission(request, settingRepo)) {
+            if (settingService.checkPermission(request)) {
                 String contentId = getContentId(request.getMessage());
                 if (contentId == null) {
                     sender.sendText(request.getChatId(), "чот хуйня какая-то получается((");
@@ -41,8 +41,8 @@ public class SetPictureAction implements Action {
                     banya.setChatName(request.getChatTitle());
                     banyaRepo.save(banya);
 
-                    String textPictureSet = settingRepo.findByName(TEXT_PICTURE_SET).getValue();
-                    String stickerPictureSet = settingRepo.findByName(STICKER_PICTURE_SET).getValue();
+                    String textPictureSet = settingService.getString(TEXT_PICTURE_SET);
+                    String stickerPictureSet = settingService.getString(STICKER_PICTURE_SET);
                     sender.sendText(request.getChatId(), textPictureSet);
                     sender.sendSticker(request.getChatId(), stickerPictureSet);
                 }

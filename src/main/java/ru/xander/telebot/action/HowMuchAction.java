@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
 import ru.xander.telebot.repository.BanyaRepo;
-import ru.xander.telebot.repository.SettingRepo;
+import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
@@ -19,7 +19,7 @@ import static ru.xander.telebot.dto.SettingName.*;
 @Component
 public class HowMuchAction implements Action {
     @Autowired
-    private SettingRepo settingRepo;
+    private SettingService settingService;
     @Autowired
     private BanyaRepo banyaRepo;
 
@@ -45,7 +45,7 @@ public class HowMuchAction implements Action {
                 return;
             }
 
-            final String template = settingRepo.findByName(TEXT_HOWMUCH_BEFORE).getValue();
+            final String template = settingService.getString(TEXT_HOWMUCH_BEFORE);
             long nowNanos = now.toEpochMilli() * 1_000_000L + System.nanoTime() % 1_000_000L;
             long startNanos = banya.getStart().toEpochMilli() * 1_000_000L;
             long nanos = startNanos - nowNanos;
@@ -53,7 +53,7 @@ public class HowMuchAction implements Action {
 
         } else if (banya.getFinish().isAfter(now)) {
 
-            final String template = settingRepo.findByName(TEXT_HOWMUCH_ONAIR).getValue();
+            final String template = settingService.getString(TEXT_HOWMUCH_ONAIR);
             long nowNanos = now.toEpochMilli() * 1_000_000L + System.nanoTime() % 1_000_000L;
             long startNanos = banya.getStart().toEpochMilli() * 1_000_000L;
             long nanos = nowNanos - startNanos;
@@ -61,7 +61,7 @@ public class HowMuchAction implements Action {
 
         } else {
 
-            final String template = settingRepo.findByName(TEXT_HOWMUCH_AFTER).getValue();
+            final String template = settingService.getString(TEXT_HOWMUCH_AFTER);
             long nowNanos = now.toEpochMilli() * 1_000_000L + System.nanoTime() % 1_000_000L;
             long endNanos = banya.getFinish().toEpochMilli() * 1_000_000L;
             long nanos = nowNanos - endNanos;
@@ -74,7 +74,7 @@ public class HowMuchAction implements Action {
 
     private Long getBanyaChatId(Request request) {
         if (request.isBotChat()) {
-            return getActiveChatId(settingRepo);
+            return settingService.getActiveChatId();
         }
         return request.getChatId();
     }

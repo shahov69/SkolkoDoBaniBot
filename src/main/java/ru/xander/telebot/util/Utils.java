@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public abstract class Utils {
 
-    public static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
+    private static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
     private static final Random random = new Random(Long.MAX_VALUE);
 
     private Utils() {

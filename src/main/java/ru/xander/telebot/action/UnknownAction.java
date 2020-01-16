@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
-import ru.xander.telebot.entity.Setting;
-import ru.xander.telebot.repository.SettingRepo;
+import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
@@ -41,14 +40,14 @@ public class UnknownAction implements Action {
     };
 
     @Autowired
-    private SettingRepo settingRepo;
+    private SettingService settingService;
 
     @Override
     public void execute(Request request, Sender sender) {
         if (request.isSuperUser()) {
             sender.sendSticker(request.getChatId(), "CAADAgADGAAD5NdGDj8TYTfHnZ7gAg");
         } else {
-            Setting textUnknown = settingRepo.findByName(TEXT_UNKNOWN);
+            String textUnknown = settingService.getString(TEXT_UNKNOWN);
             if (Utils.isHappyBirthDay()) {
                 if (request.isReplyToBot()) {
                     if (Utils.randomBoolean()) {
@@ -65,9 +64,9 @@ public class UnknownAction implements Action {
                 }
             } else if (Utils.randomBoolean()) {
                 if (Utils.randomBoolean()) {
-                    sender.sendText(request.getChatId(), textUnknown.getValue());
+                    sender.sendText(request.getChatId(), textUnknown);
                 } else {
-                    sender.sendText(request.getChatId(), textUnknown.getValue(), request.getMessageId());
+                    sender.sendText(request.getChatId(), textUnknown, request.getMessageId());
                 }
             } else {
                 String userMention = Utils.randomUserMention(request);
