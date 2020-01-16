@@ -25,12 +25,8 @@ public class PictureAction implements Action {
     @Override
     public void execute(Request request, Sender sender) {
         Long chatId = getBanyaChatId(request);
-        if (chatId == null) {
-            sender.sendText(request.getBotChatId(), "Установи ACTIVE_CHAT_ID!!!");
-            return;
-        }
-
         Banya banya = banyaRepo.findByChatId(chatId);
+
         if ((banya == null) || StringUtils.isEmpty(banya.getPicture())) {
             @Cleanup InputStream picture = getClass().getResourceAsStream("/media/default_picture.jpg");
             sender.sendPicture(request.getChatId(), "пикча для бани", picture);

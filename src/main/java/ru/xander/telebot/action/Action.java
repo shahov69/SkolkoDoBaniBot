@@ -3,6 +3,7 @@ package ru.xander.telebot.action;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Setting;
 import ru.xander.telebot.repository.SettingRepo;
+import ru.xander.telebot.util.BotException;
 import ru.xander.telebot.util.Sender;
 
 import java.util.Objects;
@@ -30,7 +31,7 @@ public interface Action {
     default Long getActiveChatId(SettingRepo settingRepo) {
         Setting activeChatId = settingRepo.findByName(ACTIVE_CHAT_ID);
         if (activeChatId == null) {
-            return null;
+            throw new BotException("Установи ACTIVE_CHAT_ID!!!");
         }
         return activeChatId.getValueAsLong();
     }

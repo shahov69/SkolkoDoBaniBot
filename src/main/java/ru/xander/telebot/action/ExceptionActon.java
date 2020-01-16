@@ -2,6 +2,7 @@ package ru.xander.telebot.action;
 
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.util.BotException;
 import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
@@ -19,6 +20,11 @@ public class ExceptionActon implements Action {
 
     @Override
     public void execute(Request request, Sender sender) {
+        if (exception instanceof BotException) {
+            sender.sendText(request.getBotChatId(), exception.getMessage());
+            return;
+        }
+
         if (!request.isBotChat()) {
             sender.sendSticker(request.getChatId(), "CAADBQADcwMAAukKyANgmywamaobRwI");
         }
