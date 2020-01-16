@@ -15,6 +15,7 @@ import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
+import ru.xander.telebot.action.HowMuchAction;
 import ru.xander.telebot.action.PictureAction;
 import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
@@ -105,9 +106,12 @@ public class ActionService {
         if (photo != null && !photo.isEmpty()) {
             return actionMap.get(SetPictureAction.class);
         }
-        String actionName = prepareActionName(message.getText());
-        if ("/pikcha".equals(actionName)) {
-            return actionMap.get(PictureAction.class);
+        final String actionName = prepareActionName(message.getText());
+        switch (actionName) {
+            case "/howmuch":
+                return actionMap.get(HowMuchAction.class);
+            case "/pikcha":
+                return actionMap.get(PictureAction.class);
         }
         return actionMap.get(UnknownAction.class);
     }

@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * @author Alexander Shakhov
@@ -26,8 +26,8 @@ public class Banya {
     @NotNull
     private Long chatId;
     private String chatName;
-    private LocalDateTime start;
-    private LocalDateTime finish;
+    private Instant start;
+    private Instant finish;
     private String picture;
 
 }
