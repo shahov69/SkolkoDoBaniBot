@@ -19,8 +19,12 @@ import static ru.xander.telebot.dto.SettingName.ADMIN_ID;
  */
 @Service
 public class SettingService {
+    private final SettingRepo settingRepo;
+
     @Autowired
-    private SettingRepo settingRepo;
+    public SettingService(SettingRepo settingRepo) {
+        this.settingRepo = settingRepo;
+    }
 
     public String getString(SettingName settingName) {
         Setting setting = settingRepo.findByName(settingName);

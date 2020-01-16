@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
-import ru.xander.telebot.repository.BanyaRepo;
+import ru.xander.telebot.service.BanyaService;
 import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
@@ -21,13 +21,12 @@ public class HowMuchAction implements Action {
     @Autowired
     private SettingService settingService;
     @Autowired
-    private BanyaRepo banyaRepo;
+    private BanyaService banyaService;
 
     @SuppressWarnings("DuplicatedCode")
     @Override
     public void execute(Request request, Sender sender) {
-        Long chatId = getBanyaChatId(request);
-        Banya banya = banyaRepo.findByChatId(chatId);
+        Banya banya = banyaService.getBanyaForActiveChat(request);
 
         if ((banya == null) || (banya.getStart() == null)) {
             sender.sendText(request.getChatId(), "Хуй его знает");
@@ -70,13 +69,6 @@ public class HowMuchAction implements Action {
         }
 
         sender.sendText(request.getChatId(), result);
-    }
-
-    private Long getBanyaChatId(Request request) {
-        if (request.isBotChat()) {
-            return settingService.getActiveChatId();
-        }
-        return request.getChatId();
     }
 
     private static boolean isShowFuck(Request request) {

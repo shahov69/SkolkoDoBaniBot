@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
-import ru.xander.telebot.repository.BanyaRepo;
+import ru.xander.telebot.service.BanyaService;
 import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 
@@ -20,12 +20,11 @@ public class PictureAction implements Action {
     @Autowired
     private SettingService settingService;
     @Autowired
-    private BanyaRepo banyaRepo;
+    private BanyaService banyaService;
 
     @Override
     public void execute(Request request, Sender sender) {
-        Long chatId = getBanyaChatId(request);
-        Banya banya = banyaRepo.findByChatId(chatId);
+        Banya banya = banyaService.getBanyaForActiveChat(request);
 
         if ((banya == null) || StringUtils.isEmpty(banya.getPicture())) {
             @Cleanup InputStream picture = getClass().getResourceAsStream("/media/default_picture.jpg");
@@ -54,12 +53,5 @@ public class PictureAction implements Action {
                     break;
             }
         }
-    }
-
-    private Long getBanyaChatId(Request request) {
-        if (request.isBotChat()) {
-            return settingService.getActiveChatId();
-        }
-        return request.getChatId();
     }
 }
