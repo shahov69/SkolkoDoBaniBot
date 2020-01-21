@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Service
 public class ForecastService {
-    private static final String FORECAST_URL_PATTERN = "http://dataservice.accuweather.com/forecasts/v1/daily/1day/%d?apikey=%s&language=ru-ru&details=true&metric=true";
+    private static final String FORECAST_URL_PATTERN = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/%d?apikey=%s&language=ru-ru&details=true&metric=true";
     private final RestTemplate rest;
     private final Map<LocalDate, Forecast> forecastCache;
 

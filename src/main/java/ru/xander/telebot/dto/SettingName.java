@@ -39,5 +39,9 @@ public enum SettingName {
     /**
      * Текст при неопределенной команде
      */
-    TEXT_UNKNOWN
+    TEXT_UNKNOWN,
+    /**
+     * Тексты для картинки с погодкой
+     */
+    TEXT_WEATHER
 }

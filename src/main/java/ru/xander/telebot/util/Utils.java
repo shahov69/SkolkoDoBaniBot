@@ -15,6 +15,8 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -51,6 +53,14 @@ public abstract class Utils {
         Integer userId = request.getUserId();
         String userName = (request.getUserName() != null) && randomBoolean() ? request.getUserName() : request.getUserFullName();
         return String.format("[%s](tg://user?id=%d)", userName, userId);
+    }
+
+    public static int max(int first, int... others) {
+        int max = first;
+        for (int i = 0; i < others.length; i++) {
+            max = Math.max(max, others[i]);
+        }
+        return max;
     }
 
     public static boolean isHappyBirthDay() {
@@ -121,6 +131,26 @@ public abstract class Utils {
                 .replace("${DAYS}", String.format("%.2f", inDays));
     }
 
+    public static List<String> getSplitPhrase(String phrase, int maxLengt) {
+        List<String> result = new LinkedList<>();
+        String[] splitted = phrase.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String s : splitted) {
+            if (sb.length() > maxLengt) {
+                result.add(sb.toString());
+                sb.setLength(0);
+            }
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(s);
+        }
+        if (sb.length() > 0) {
+            result.add(sb.toString());
+        }
+        return result;
+    }
+
     public static String stackTraceToString(Throwable throwable) {
         try (
                 StringWriter stringWriter = new StringWriter();
@@ -139,5 +169,17 @@ public abstract class Utils {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    public static <T> T readResource(String resourceName, ResourceReader<T> resourceReader) {
+        try (InputStream resource = Utils.class.getResourceAsStream(resourceName)) {
+            return resourceReader.apply(resource);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    public interface ResourceReader<T> {
+        T apply(InputStream resource) throws Exception;
     }
 }
