@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +34,10 @@ public class ForecastRenderer {
     private static final String EMPTY_STRING = "";
 
     private static final Map<Integer, String> iconResources;
+
+    private static final DateTimeFormatter DD_MMMM = DateTimeFormatter.ofPattern("dd MMMM");
+    private static final DateTimeFormatter MMDD = DateTimeFormatter.ofPattern("MMDD");
+    private static final DateTimeFormatter HH_MM = DateTimeFormatter.ofPattern("HH:mm");
 
     static {
         iconResources = new HashMap<>();
@@ -80,16 +83,19 @@ public class ForecastRenderer {
         iconResources.put(44, "/accuweather/44-mostly_cloudy_w_snow.png");
     }
 
-    public InputStream render(Forecast forecast, WeatherTexts texts) throws IOException {
-        BufferedImage image = drawImage(forecast, texts);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", outputStream);
-        return new ByteArrayInputStream(outputStream.toByteArray());
+    public InputStream render(Forecast forecast, WeatherTexts texts) {
+        try {
+            BufferedImage image = drawImage(forecast, texts);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", outputStream);
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot render forecast: " + e.getMessage(), e);
+        }
     }
 
     private BufferedImage drawImage(Forecast forecast, WeatherTexts texts) {
-        //TODO: брать погодку в соответствии с часовым поясом
-        final DailyForecast dailyForecast = forecast.getDailyForecasts().get(0);
+        final DailyForecast dailyForecast = getDailyForecast(forecast);
         final Sun sun = dailyForecast.getSun();
         final Conditions day = dailyForecast.getDay();
         final Conditions night = dailyForecast.getNight();
@@ -111,7 +117,7 @@ public class ForecastRenderer {
         graphics.setColor(CYAN);
         graphics.setFont(font.deriveFont(Font.BOLD, 14.0f));
 
-        String ddMMMMM = dailyForecast.getDate().format(DateTimeFormatter.ofPattern("dd MMMM"));
+        String ddMMMMM = dailyForecast.getDate().format(DD_MMMM);
         graphics.drawString(texts.getTitle() + ddMMMMM, 10, 23);
 
         graphics.setColor(DARK);
@@ -123,7 +129,7 @@ public class ForecastRenderer {
         graphics.drawString(formatTemperature(dailyForecast.getTemperature().getMaximum()), 10, 82);
         graphics.drawString(formatTemperature(dailyForecast.getTemperature().getMinimum()), HORZ_MID + 10, 82);
 
-        graphics.setFont(font.deriveFont(15.0f));
+        graphics.setFont(font.deriveFont(14.0f));
         AtomicInteger phraseY = new AtomicInteger(164);
         dayPhrase.forEach(s -> graphics.drawString(s, 10, phraseY.getAndAdd(20)));
         phraseY.set(164);
@@ -131,7 +137,7 @@ public class ForecastRenderer {
 //        graphics.drawString(day.getShortPhrase(), 10, 167);
 //        graphics.drawString(night.getShortPhrase(), HORZ_MID + 10, 164);
 
-        graphics.setFont(font.deriveFont(15.0f));
+        graphics.setFont(font.deriveFont(14.0f));
         graphics.drawString(texts.getWind() + formatWind(day.getWind()), 10, 187 + phraseOffset);
 
         graphics.drawString(texts.getSunrise() + formatTime(sun.getRise()), 10, 210 + phraseOffset);
@@ -224,6 +230,17 @@ public class ForecastRenderer {
         return image;
     }
 
+    private DailyForecast getDailyForecast(Forecast forecast) {
+        final String now = LocalDateTime.now(Utils.ZONE_ID_MOSCOW).format(MMDD);
+        for (DailyForecast dailyForecast : forecast.getDailyForecasts()) {
+            String date = dailyForecast.getDate().format(MMDD);
+            if (date.equals(now)) {
+                return dailyForecast;
+            }
+        }
+        throw new IllegalStateException("Daily forecast not found");
+    }
+
     private static String formatTemperature(Value temperature) {
         return String.format("%.1f° %s",
                 temperature.getValue(),
@@ -242,7 +259,7 @@ public class ForecastRenderer {
     }
 
     private static String formatTime(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
+        return time.format(HH_MM);
     }
 
     private static String formatPercent(Integer percent) {

@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 public abstract class Utils {
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-    private static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
+    public static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
     private static final Locale LOCALE_RU = Locale.forLanguageTag("RU");
     private static final Random random = new Random(Long.MAX_VALUE);
 
@@ -131,23 +131,29 @@ public abstract class Utils {
                 .replace("${DAYS}", String.format("%.2f", inDays));
     }
 
-    public static List<String> getSplitPhrase(String phrase, int maxLengt) {
+    public static List<String> getSplitPhrase(String phrase, int maxLength) {
         List<String> result = new LinkedList<>();
-        String[] splitted = phrase.split(" ");
-        StringBuilder sb = new StringBuilder();
-        for (String s : splitted) {
-            if (sb.length() > maxLengt) {
-                result.add(sb.toString());
-                sb.setLength(0);
+        int space = phrase.indexOf(' ');
+        int last = 0;
+        StringBuilder sub = new StringBuilder();
+        while (space > -1) {
+            int len = sub.length();
+            if ((len > 0) && ((len + space - last + 1) > maxLength)) {
+                result.add(sub.toString());
+                sub.setLength(0);
             }
-            if (sb.length() > 0) {
-                sb.append(' ');
+            if (sub.length() > 0) {
+                sub.append(' ');
             }
-            sb.append(s);
+            sub.append(phrase, last, space);
+            last = space + 1;
+            space = phrase.indexOf(' ', last);
         }
-        if (sb.length() > 0) {
-            result.add(sb.toString());
+        if (sub.length() > 0) {
+            sub.append(' ');
         }
+        sub.append(phrase, last, phrase.length());
+        result.add(sub.toString());
         return result;
     }
 
