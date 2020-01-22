@@ -8,6 +8,7 @@ import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.Setting;
 import ru.xander.telebot.repository.SettingRepo;
 import ru.xander.telebot.util.BotException;
+import ru.xander.telebot.util.Utils;
 
 import java.util.Objects;
 
@@ -48,6 +49,14 @@ public class SettingService {
             return null;
         }
         return Long.parseLong(value);
+    }
+
+    public <T> T getJson(SettingName settingName, Class<T> clazz) {
+        String value = getString(settingName);
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return Utils.parseJson(value, clazz);
     }
 
     public Long getActiveChatId() {

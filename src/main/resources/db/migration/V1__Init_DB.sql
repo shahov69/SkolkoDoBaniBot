@@ -19,3 +19,28 @@ create table banya
     picture   varchar(255),
     primary key (id)
 );
+
+create table usr
+(
+    id         int4 not null,
+    city_id    int4,
+    first_name varchar(255),
+    is_bot     boolean,
+    lang_code  varchar(255),
+    last_name  varchar(255),
+    user_name  varchar(255),
+    primary key (id)
+);
+
+create table omen
+(
+    day         int4 not null,
+    title       varchar(255),
+    all_titles  varchar(2000),
+    description text,
+    omens       varchar(2000),
+    names       varchar(2000),
+    dreams      varchar(2000),
+    talismans   varchar(2000),
+    primary key (day)
+)

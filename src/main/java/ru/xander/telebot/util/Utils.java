@@ -1,5 +1,7 @@
 package ru.xander.telebot.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.dto.TimeOfDay;
 
@@ -30,6 +32,13 @@ public abstract class Utils {
     public static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
     private static final Locale LOCALE_RU = Locale.forLanguageTag("RU");
     private static final Random random = new Random(Long.MAX_VALUE);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String[] slavMonths = { "",
+            "січня", "лютого", "березня",
+            "квітня", "травня", "червня",
+            "липня", "серпня", "вересня",
+            "жовтня", "листопада", "грудня"
+    };
 
     private Utils() {
         throw new IllegalStateException("Utility class");
@@ -47,6 +56,12 @@ public abstract class Utils {
         int size = array.length;
         int index = random.nextInt(size);
         return array[index];
+    }
+
+    public static <T> T randomList(List<T> list) {
+        int size = list.size();
+        int index = random.nextInt(size);
+        return list.get(index);
     }
 
     public static String randomUserMention(Request request) {
@@ -81,12 +96,32 @@ public abstract class Utils {
         return Instant.from(DateTimeFormatter.ofPattern(format).withZone(ZONE_ID_MOSCOW).parse(date));
     }
 
+    public static int getDayId() {
+        return getDayId(LocalDate.now(ZONE_ID_MOSCOW));
+    }
+
+    public static int getDayId(LocalDate localDate) {
+        return localDate.getMonthValue() * 100 + localDate.getDayOfMonth();
+    }
+
     public static String formatDate(TemporalAccessor date, String format) {
         return DateTimeFormatter
                 .ofPattern(format)
                 .withLocale(LOCALE_RU)
                 .withZone(ZONE_ID_MOSCOW)
                 .format(date);
+    }
+
+    public static String formatSlavDay(int month, int day) {
+        return day + "-е " + slavMonths[month];
+    }
+
+    public static <T> T parseJson(String json, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     public static TimeOfDay getTimeOfDay() {

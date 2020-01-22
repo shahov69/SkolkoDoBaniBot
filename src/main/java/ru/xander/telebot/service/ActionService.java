@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
 import ru.xander.telebot.action.AdminDocumentAction;
+import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminVideoAction;
@@ -22,6 +23,7 @@ import ru.xander.telebot.action.SetBanyaTimeAction;
 import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
 import ru.xander.telebot.action.UnsetBanyaTimeAction;
+import ru.xander.telebot.action.WeatherAction;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.util.Sender;
 
@@ -95,6 +97,11 @@ public class ActionService {
         if (photo != null && !photo.isEmpty()) {
             return actionMap.get(AdminPhotoAction.class);
         }
+        final String actionName = prepareActionName(message.getText());
+        switch (actionName) {
+            case "/omen":
+                return actionMap.get(AdminOmenAction.class);
+        }
         return null;
     }
 
@@ -121,6 +128,8 @@ public class ActionService {
                 return actionMap.get(SetBanyaTimeAction.class);
             case "/unset":
                 return actionMap.get(UnsetBanyaTimeAction.class);
+            case "/weather":
+                return actionMap.get(WeatherAction.class);
         }
         return actionMap.get(UnknownAction.class);
     }
