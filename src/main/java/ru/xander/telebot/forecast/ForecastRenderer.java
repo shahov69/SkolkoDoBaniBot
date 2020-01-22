@@ -24,8 +24,8 @@ public class ForecastRenderer {
 
     private static final Color WHITE = new Color(255, 255, 255);
     private static final Color CYAN = new Color(0, 175, 190);
-    private static final Color GRAY = new Color(121, 136, 149);
-    private static final Color DARK = new Color(37, 56, 78);
+    private static final Color GRAY = new Color(111, 126, 139);
+    private static final Color DARK = new Color(27, 46, 68);
 
     private static final int WIDTH = 425;
     private static final int HEIGHT = 247;
@@ -238,7 +238,7 @@ public class ForecastRenderer {
                 return dailyForecast;
             }
         }
-        throw new IllegalStateException("Daily forecast not found");
+        return forecast.getDailyForecasts().get(0);
     }
 
     private static String formatTemperature(Value temperature) {
@@ -275,11 +275,7 @@ public class ForecastRenderer {
     }
 
     private static Font getFont(WeatherTexts texts) {
-        if ("JP".equalsIgnoreCase(texts.getLocale())) {
-            return Utils.readResource("/fonts/msgothic.ttc", inputStream -> Font.createFont(Font.TRUETYPE_FONT, inputStream));
-        } else {
-            return Utils.readResource("/fonts/segoeui.ttf", inputStream -> Font.createFont(Font.TRUETYPE_FONT, inputStream));
-        }
+        return Utils.readResource("/fonts/news_cycle.ttf", inputStream -> Font.createFont(Font.TRUETYPE_FONT, inputStream));
     }
 
     private static Image loadIcon(int index, int defaultIndex) {
