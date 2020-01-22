@@ -3,8 +3,8 @@ create table setting
 (
     id            int8         not null,
     name          varchar(255) not null,
-    value         varchar(255),
-    default_value varchar(255),
+    value         varchar(10000),
+    default_value varchar(10000),
     primary key (id)
 );
 
@@ -37,7 +37,7 @@ create table omen
     day         int4 not null,
     title       varchar(255),
     all_titles  varchar(2000),
-    description text,
+    description varchar(2000),
     omens       varchar(2000),
     names       varchar(2000),
     dreams      varchar(2000),

@@ -21,6 +21,10 @@ public enum SettingName {
      */
     STICKER_PICTURE_SET,
     /**
+     * Текст для справкик
+     */
+    TEXT_HELP,
+    /**
      * Текст с временем до баньки
      */
     TEXT_HOWMUCH_BEFORE,

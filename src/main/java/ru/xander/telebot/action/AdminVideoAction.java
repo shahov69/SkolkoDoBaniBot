@@ -15,7 +15,7 @@ public class AdminVideoAction implements Action {
         if (request.isBotChat()) {
             Video video = request.getMessage().getVideo();
             String message = String.format(
-                    "/sv %s\nWidth: %d, Height: %d\nDuration: %d, Size: %d\nMime: %s",
+                    "/sv_%s\nWidth: %d, Height: %d\nDuration: %d, Size: %d\nMime: %s",
                     video.getFileId(),
                     video.getWidth(),
                     video.getHeight(),

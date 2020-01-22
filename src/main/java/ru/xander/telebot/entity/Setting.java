@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.xander.telebot.dto.SettingName;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,6 +28,8 @@ public class Setting {
     @NotNull
     @Enumerated(EnumType.STRING)
     private SettingName name;
+    @Column(length = 10000)
     private String value;
+    @Column(length = 10000)
     private String defaultValue;
 }

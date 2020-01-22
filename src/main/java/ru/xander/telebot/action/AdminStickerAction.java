@@ -12,7 +12,7 @@ public class AdminStickerAction implements Action {
     @Override
     public void execute(Request request, Sender sender) {
         if (request.isBotChat()) {
-            sender.sendText(request.getBotChatId(), "/ss " + request.getStickerId());
+            sender.sendText(request.getBotChatId(), "/ss_" + request.getStickerId());
         }
     }
 }

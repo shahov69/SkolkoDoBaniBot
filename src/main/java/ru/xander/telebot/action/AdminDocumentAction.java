@@ -15,7 +15,7 @@ public class AdminDocumentAction implements Action {
         if (request.isBotChat()) {
             Document document = request.getMessage().getDocument();
             String message = String.format(
-                    "/sd %s\nFile name: %s\nFile size: %d\nMime Type: %s",
+                    "/sd_%s\nFile name: %s\nFile size: %d\nMime Type: %s",
                     document.getFileId(),
                     document.getFileName(),
                     document.getFileSize(),

@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Request {
     private Message message;
     private String rawMessage;
+    private String actionName;
     private Integer botUserId;
     private Long botChatId;
     private Integer superUserId;

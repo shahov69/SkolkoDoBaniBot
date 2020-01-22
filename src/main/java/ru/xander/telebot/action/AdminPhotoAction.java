@@ -20,7 +20,7 @@ public class AdminPhotoAction implements Action {
                     .stream()
                     .map(pz ->
                             String.format(
-                                    "/sp %s\nCaption: %s, File path: %s, File size: %d, WxH: %dx%d",
+                                    "/sp_%s\nCaption: %s, File path: %s, File size: %d, WxH: %dx%d",
                                     pz.getFileId(),
                                     request.getCaption(),
                                     pz.getFilePath(),

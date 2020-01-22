@@ -13,10 +13,13 @@ import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminStickerAction;
+import ru.xander.telebot.action.AdminSysParamAction;
+import ru.xander.telebot.action.AdminSystemAction;
 import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
 import ru.xander.telebot.action.HelloActiton;
+import ru.xander.telebot.action.HelpAction;
 import ru.xander.telebot.action.HowMuchAction;
 import ru.xander.telebot.action.PictureAction;
 import ru.xander.telebot.action.SetBanyaTimeAction;
@@ -101,6 +104,12 @@ public class ActionService {
         switch (actionName) {
             case "/omen":
                 return actionMap.get(AdminOmenAction.class);
+            case "/sys":
+            case "/system":
+                return actionMap.get(AdminSystemAction.class);
+            case "/sysparam":
+            case "/sysdefault":
+                return actionMap.get(AdminSysParamAction.class);
         }
         return null;
     }
@@ -120,6 +129,8 @@ public class ActionService {
         switch (actionName) {
             case "/hello":
                 return actionMap.get(HelloActiton.class);
+            case "/help":
+                return actionMap.get(HelpAction.class);
             case "/howmuch":
                 return actionMap.get(HowMuchAction.class);
             case "/pikcha":
@@ -156,6 +167,7 @@ public class ActionService {
         Request request = new Request();
         request.setMessage(message);
         request.setRawMessage(message.getText());
+        request.setActionName(prepareActionName(message.getText()));
         request.setBotUserId(botUserId);
         request.setBotChatId(botChatId);
         request.setSuperUserId(botSuperUserId);

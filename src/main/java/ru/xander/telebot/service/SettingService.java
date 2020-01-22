@@ -10,6 +10,7 @@ import ru.xander.telebot.repository.SettingRepo;
 import ru.xander.telebot.util.BotException;
 import ru.xander.telebot.util.Utils;
 
+import java.util.List;
 import java.util.Objects;
 
 import static ru.xander.telebot.dto.SettingName.ACTIVE_CHAT_ID;
@@ -25,6 +26,10 @@ public class SettingService {
     @Autowired
     public SettingService(SettingRepo settingRepo) {
         this.settingRepo = settingRepo;
+    }
+
+    public List<Setting> getAll() {
+        return settingRepo.findAll();
     }
 
     public String getString(SettingName settingName) {

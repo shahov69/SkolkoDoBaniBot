@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 /**
  * @author Alexander Shakhov
@@ -20,7 +19,7 @@ public class Omen {
     private String title;
     @Column(length = 2000)
     private String allTitles;
-    @Lob
+    @Column(length = 2000)
     private String description;
     @Column(length = 2000)
     private String omens;

@@ -4,6 +4,27 @@ values (2, 'TEXT_UNKNOWN', 'あなた自身をクソ始めなさい!', 'Чо х�
        (4, 'STICKER_PICTURE_SET', 'CAADAgADXRkAAuX3UgNM4iWkZTPitwI', 'CAADAgADOAEAAhZ8aAP0b0MaIxsr8QI'),
        (4, 'ACTIVE_CHAT_ID', null, null),
        (4, 'STICKER_HELLO', 'CAADAgADNxkAAuX3UgM9_oYuM8udiwI', 'CAADAgADGAAD5NdGDj8TYTfHnZ7gAg'),
+       (4, 'TEXT_HELP', '<code>/hello</code> поприветствовать бота
+<code>/howmuch</code> сколько времени до баньки
+<code>/happybyozday</code> поздравить бота с днём рождения
+<code>/set %startDateTime% %endDateTime%</code> установить время баньки (в формате yyyyMMdd-HHmmss)
+<code>/unset</code> сбросить время баньки
+<code>/pikcha</code> посмотреть картинку
+<code>/weather</code> погодка
+<code>/random_ilya</code> случайный илюшизм
+<code>/add_ilya</code> добавить новый илюшизм
+<code>/help</code> хелп
+<code>/пикча для бани</code> установить пикчу для баньки', '<code>/hello</code> поприветствовать бота
+<code>/howmuch</code> сколько времени до баньки
+<code>/happybyozday</code> поздравить бота с днём рождения
+<code>/set %startDateTime% %endDateTime%</code> установить время баньки (в формате yyyyMMdd-HHmmss)
+<code>/unset</code> сбросить время баньки
+<code>/pikcha</code> посмотреть картинку
+<code>/weather</code> погодка
+<code>/random_ilya</code> случайный илюшизм
+<code>/add_ilya</code> добавить новый илюшизм
+<code>/help</code> хелп
+<code>/пикча для бани</code> установить пикчу для баньки'),
        (4, 'TEXT_WEATHER',
         '{"locale":"RU","title":"погодка на ","day":"ДЕНЬ","night":"НОЧЬ","sunrise":"Рассвет ","sunset":"Закат ","feel":"ощущается","precipitation":"осадки","cloudy":"облачность","humidity":"влажность","thunders":"гроза","wind":"Ветер ","uvIndex":"Уровень ультрафиолета "}',
         '{"locale":"RU","title":"погодка на ","day":"ДЕНЬ","night":"НОЧЬ","sunrise":"Рассвет ","sunset":"Закат ","feel":"ощущается","precipitation":"осадки","cloudy":"облачность","humidity":"влажность","thunders":"гроза","wind":"Ветер ","uvIndex":"Уровень ультрафиолета "}'),
