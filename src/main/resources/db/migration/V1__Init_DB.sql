@@ -43,4 +43,26 @@ create table omen
     dreams      varchar(2000),
     talismans   varchar(2000),
     primary key (day)
-)
+);
+
+create sequence ilushizm_sequence start 1 increment 1;
+create table ilushizm
+(
+    id       int8 not null,
+    txt      varchar(2000),
+    creator  varchar(255),
+    created  timestamp,
+    accepted boolean,
+    primary key (id)
+);
+
+create sequence kirushizm_sequence start 1 increment 1;
+create table kirushizm
+(
+    id       int8 not null,
+    txt      varchar(2000),
+    creator  varchar(255),
+    created  timestamp,
+    accepted boolean,
+    primary key (id)
+);
