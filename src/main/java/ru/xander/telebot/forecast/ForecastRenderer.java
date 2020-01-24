@@ -1,6 +1,7 @@
 package ru.xander.telebot.forecast;
 
 import ru.xander.telebot.dto.WeatherTexts;
+import ru.xander.telebot.util.Fonts;
 import ru.xander.telebot.util.Utils;
 
 import javax.imageio.ImageIO;
@@ -275,7 +276,7 @@ public class ForecastRenderer {
     }
 
     private static Font getFont(WeatherTexts texts) {
-        return Utils.readResource("/fonts/news_cycle.ttf", inputStream -> Font.createFont(Font.TRUETYPE_FONT, inputStream));
+        return Fonts.NEWS_CYCLE.getFont();
     }
 
     private static Image loadIcon(int index, int defaultIndex) {

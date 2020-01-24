@@ -208,7 +208,7 @@ public abstract class Utils {
         try (InputStream resource = Utils.class.getResourceAsStream(resourceName)) {
             resourceConsumer.accept(resource);
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeException("Cannot read resource '" + resourceName + "': " + e.getMessage(), e);
         }
     }
 
@@ -216,7 +216,7 @@ public abstract class Utils {
         try (InputStream resource = Utils.class.getResourceAsStream(resourceName)) {
             return resourceReader.apply(resource);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeException("Cannot read resource '" + resourceName + "': " + e.getMessage(), e);
         }
     }
 
