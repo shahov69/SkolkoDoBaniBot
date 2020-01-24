@@ -13,6 +13,18 @@ public enum SettingName {
      */
     ADMIN_ID,
     /**
+     * Разрешить использование команд бота
+     */
+    ENABLE_BOT,
+    /**
+     * Разрешить илюшизмы
+     */
+    ENABLE_ILUSHIZM,
+    /**
+     * Разрешить кирюшизмы
+     */
+    ENABLE_KIRUSHIZM,
+    /**
      * Стикер для приветствия
      */
     STICKER_HELLO,

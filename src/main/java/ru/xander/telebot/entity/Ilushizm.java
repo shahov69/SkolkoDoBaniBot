@@ -2,6 +2,7 @@ package ru.xander.telebot.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@ToString
 public class Ilushizm {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ilushizm_seq")

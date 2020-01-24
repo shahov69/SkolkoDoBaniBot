@@ -22,6 +22,8 @@ import ru.xander.telebot.action.HelloActiton;
 import ru.xander.telebot.action.HelpAction;
 import ru.xander.telebot.action.HowMuchAction;
 import ru.xander.telebot.action.PictureAction;
+import ru.xander.telebot.action.RandomIlushizmAction;
+import ru.xander.telebot.action.RandomKirushizmAction;
 import ru.xander.telebot.action.SetBanyaTimeAction;
 import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
@@ -135,6 +137,11 @@ public class ActionService {
                 return actionMap.get(HowMuchAction.class);
             case "/pikcha":
                 return actionMap.get(PictureAction.class);
+            case "/random_ilya":
+                return actionMap.get(RandomIlushizmAction.class);
+            case "/random_kirya":
+            case "/kirushizm":
+                return actionMap.get(RandomKirushizmAction.class);
             case "/set":
                 return actionMap.get(SetBanyaTimeAction.class);
             case "/unset":

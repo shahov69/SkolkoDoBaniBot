@@ -40,6 +40,11 @@ public class SettingService {
         return setting.getValue();
     }
 
+    public Boolean getBoolean(SettingName settingName) {
+        String value = getString(settingName);
+        return Boolean.parseBoolean(value);
+    }
+
     public Integer getInt(SettingName settingName) {
         String value = getString(settingName);
         if (StringUtils.isEmpty(value)) {

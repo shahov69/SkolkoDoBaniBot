@@ -3,6 +3,9 @@ values (2, 'TEXT_UNKNOWN', 'あなた自身をクソ始めなさい!', 'Чо х�
        (3, 'TEXT_PICTURE_SET', '吸うディック, 同性愛者 /pikcha', 'пикча установлена, проверь /pikcha'),
        (4, 'STICKER_PICTURE_SET', 'CAADAgADXRkAAuX3UgNM4iWkZTPitwI', 'CAADAgADOAEAAhZ8aAP0b0MaIxsr8QI'),
        (4, 'ACTIVE_CHAT_ID', null, null),
+       (4, 'ENABLE_BOT', 'true','true'),
+       (4, 'ENABLE_ILUSHIZM', 'true','true'),
+       (4, 'ENABLE_KIRUSHIZM', 'true','true'),
        (4, 'STICKER_HELLO', 'CAADAgADNxkAAuX3UgM9_oYuM8udiwI', 'CAADAgADGAAD5NdGDj8TYTfHnZ7gAg'),
        (4, 'TEXT_HELP', '<code>/hello</code> поприветствовать бота
 <code>/howmuch</code> сколько времени до баньки
