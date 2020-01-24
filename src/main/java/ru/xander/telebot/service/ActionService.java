@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
 import ru.xander.telebot.action.AdminDocumentAction;
+import ru.xander.telebot.action.AdminIlyaAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminStickerAction;
@@ -21,9 +22,10 @@ import ru.xander.telebot.action.FirstTimeAction;
 import ru.xander.telebot.action.HelloActiton;
 import ru.xander.telebot.action.HelpAction;
 import ru.xander.telebot.action.HowMuchAction;
+import ru.xander.telebot.action.IlyaAddAction;
+import ru.xander.telebot.action.IlyaRandomAction;
+import ru.xander.telebot.action.KiryaRandomAction;
 import ru.xander.telebot.action.PictureAction;
-import ru.xander.telebot.action.RandomIlushizmAction;
-import ru.xander.telebot.action.RandomKirushizmAction;
 import ru.xander.telebot.action.SetBanyaTimeAction;
 import ru.xander.telebot.action.SetPictureAction;
 import ru.xander.telebot.action.UnknownAction;
@@ -103,6 +105,9 @@ public class ActionService {
             return actionMap.get(AdminPhotoAction.class);
         }
         final String actionName = prepareActionName(message.getText());
+        if (actionName.startsWith("/ilya_")) {
+            return actionMap.get(AdminIlyaAction.class);
+        }
         switch (actionName) {
             case "/omen":
                 return actionMap.get(AdminOmenAction.class);
@@ -129,6 +134,8 @@ public class ActionService {
         }
         final String actionName = prepareActionName(message.getText());
         switch (actionName) {
+            case "/add_ilya":
+                return actionMap.get(IlyaAddAction.class);
             case "/hello":
                 return actionMap.get(HelloActiton.class);
             case "/help":
@@ -138,10 +145,10 @@ public class ActionService {
             case "/pikcha":
                 return actionMap.get(PictureAction.class);
             case "/random_ilya":
-                return actionMap.get(RandomIlushizmAction.class);
+                return actionMap.get(IlyaRandomAction.class);
             case "/random_kirya":
             case "/kirushizm":
-                return actionMap.get(RandomKirushizmAction.class);
+                return actionMap.get(KiryaRandomAction.class);
             case "/set":
                 return actionMap.get(SetBanyaTimeAction.class);
             case "/unset":

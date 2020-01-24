@@ -18,12 +18,12 @@ import java.io.InputStream;
  * @author Alexander Shakhov
  */
 @Component
-public class RandomIlushizmAction implements Action {
+public class IlyaRandomAction implements Action {
     private final IlushizmRepo ilushizmRepo;
     private final SettingService settingService;
 
     @Autowired
-    public RandomIlushizmAction(IlushizmRepo ilushizmRepo, SettingService settingService) {
+    public IlyaRandomAction(IlushizmRepo ilushizmRepo, SettingService settingService) {
         this.ilushizmRepo = ilushizmRepo;
         this.settingService = settingService;
     }

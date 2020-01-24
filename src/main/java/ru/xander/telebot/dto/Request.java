@@ -89,4 +89,16 @@ public class Request {
         }
         return text.substring(firstSpace + 1).split(" ");
     }
+
+    public String getText() {
+        String text = message.getText();
+        if (text == null) {
+            return Utils.EMPTY_STRING;
+        }
+        int space = text.indexOf(' ');
+        if (space < 0) {
+            return Utils.EMPTY_STRING;
+        }
+        return text.substring(space + 1);
+    }
 }

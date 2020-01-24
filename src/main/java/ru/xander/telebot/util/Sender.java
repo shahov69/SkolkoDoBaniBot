@@ -9,6 +9,8 @@ import java.io.InputStream;
  */
 @SuppressWarnings("unused")
 public interface Sender {
+    int MAX_MESSAGE_LENGTH = 4096;
+
     void sendText(Long chatId, String text);
 
     void sendText(Long chatId, String text, Integer replyTo);

@@ -28,6 +28,7 @@ import java.util.function.Consumer;
  */
 public abstract class Utils {
 
+    public static final String EMPTY_STRING = "";
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
     public static final ZoneId ZONE_ID_MOSCOW = ZoneId.of("Europe/Moscow");
     private static final Locale LOCALE_RU = Locale.forLanguageTag("RU");

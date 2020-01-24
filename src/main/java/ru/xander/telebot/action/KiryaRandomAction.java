@@ -18,12 +18,12 @@ import java.io.InputStream;
  * @author Alexander Shakhov
  */
 @Component
-public class RandomKirushizmAction implements Action {
+public class KiryaRandomAction implements Action {
     private final KirushizmRepo kirushizmRepo;
     private final SettingService settingService;
 
     @Autowired
-    public RandomKirushizmAction(KirushizmRepo kirushizmRepo, SettingService settingService) {
+    public KiryaRandomAction(KirushizmRepo kirushizmRepo, SettingService settingService) {
         this.kirushizmRepo = kirushizmRepo;
         this.settingService = settingService;
     }
