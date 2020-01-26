@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.util.Collection;
 
+/**
+ * @author Alexander Shakhov
+ */
 @Getter
 @AllArgsConstructor
 class PosterText {

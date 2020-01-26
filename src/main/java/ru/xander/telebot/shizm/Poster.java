@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Alexander Shakhov
+ */
 @Getter
 @Slf4j
 @JsonIgnoreProperties(ignoreUnknown = true)

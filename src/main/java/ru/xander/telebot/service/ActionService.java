@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
 import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminIlyaAction;
+import ru.xander.telebot.action.AdminKiryaAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminStickerAction;
@@ -107,6 +108,8 @@ public class ActionService {
         final String actionName = prepareActionName(message.getText());
         if (actionName.startsWith("/ilya_")) {
             return actionMap.get(AdminIlyaAction.class);
+        } else if (actionName.startsWith("/kirya_")) {
+            return actionMap.get(AdminKiryaAction.class);
         }
         switch (actionName) {
             case "/omen":

@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
+/**
+ * @author Alexander Shakhov
+ */
 public class PosterRenderer {
 
     private final boolean debugMode;

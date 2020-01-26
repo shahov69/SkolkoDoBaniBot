@@ -11,6 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @author Alexander Shakhov
+ */
 @Ignore
 public class PosterRendererTest {
 

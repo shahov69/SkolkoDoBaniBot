@@ -2,6 +2,9 @@ package ru.xander.telebot.util;
 
 import java.awt.*;
 
+/**
+ * @author Alexander Shakhov
+ */
 public enum Fonts {
 
     CAVEAT_REGULAR("/fonts/caveat_regular.ttf", 36.0f),
