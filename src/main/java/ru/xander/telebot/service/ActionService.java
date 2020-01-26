@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
+import ru.xander.telebot.action.AdminChatInfoAction;
 import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminIlyaAction;
 import ru.xander.telebot.action.AdminKiryaAction;
@@ -16,9 +17,11 @@ import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminSendAction;
 import ru.xander.telebot.action.AdminSetParamAction;
+import ru.xander.telebot.action.AdminSetUserCityAction;
 import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminSysParamAction;
 import ru.xander.telebot.action.AdminSystemAction;
+import ru.xander.telebot.action.AdminUserInfoAction;
 import ru.xander.telebot.action.AdminVideoAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
@@ -121,8 +124,12 @@ public class ActionService {
                 || actionName.startsWith("/sv_")
                 || actionName.startsWith("/sd_")) {
             return actionMap.get(AdminSendAction.class);
+        } else if (actionName.startsWith("/setusercity")) {
+            return actionMap.get(AdminSetUserCityAction.class);
         }
         switch (actionName) {
+            case "/chatinfo":
+                return actionMap.get(AdminChatInfoAction.class);
             case "/happybyozday_test":
                 return actionMap.get(HappyBirthDayAction.class);
             case "/omen":
@@ -135,6 +142,8 @@ public class ActionService {
             case "/sysparam":
             case "/sysdefault":
                 return actionMap.get(AdminSysParamAction.class);
+            case "/userinfo":
+                return actionMap.get(AdminUserInfoAction.class);
         }
         return null;
     }

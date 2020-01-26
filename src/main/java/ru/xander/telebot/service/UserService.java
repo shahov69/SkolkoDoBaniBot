@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.User;
 import ru.xander.telebot.repository.UserRepo;
+import ru.xander.telebot.util.BotException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,5 +36,20 @@ public class UserService {
         user.setIsBot(telegramUser.getBot());
         user.setLangCode(telegramUser.getLanguageCode());
         return userRepo.save(user);
+    }
+
+    public List<User> getAll() {
+        return userRepo.findAll();
+    }
+
+    public void updateCityId(int userId, int cityId) {
+        Optional<User> optional = userRepo.findById(userId);
+        if (!optional.isPresent()) {
+            throw new BotException("Пользователь с ID = " + userId + " не найден");
+        }
+
+        User user = optional.get();
+        user.setCityId(cityId);
+        userRepo.save(user);
     }
 }

@@ -6,6 +6,8 @@ import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
 import ru.xander.telebot.repository.BanyaRepo;
 
+import java.util.List;
+
 /**
  * @author Alexander Shakhov
  */
@@ -45,5 +47,9 @@ public class BanyaService {
                 ? settingService.getActiveChatId()
                 : request.getChatId();
         return banyaRepo.findByChatId(chatId);
+    }
+
+    public List<Banya> getAll() {
+        return banyaRepo.findAll();
     }
 }
