@@ -1,7 +1,7 @@
 package ru.xander.telebot.forecast;
 
+import ru.xander.telebot.dto.Fonts;
 import ru.xander.telebot.dto.WeatherTexts;
-import ru.xander.telebot.util.Fonts;
 import ru.xander.telebot.util.Utils;
 
 import javax.imageio.ImageIO;

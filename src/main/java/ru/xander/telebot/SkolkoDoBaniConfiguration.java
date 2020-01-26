@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
  * @author Alexander Shakhov
  */
 @Configuration
-public class Configuraion {
+public class SkolkoDoBaniConfiguration {
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();

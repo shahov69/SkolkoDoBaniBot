@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Video;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Banya;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.BanyaService;
 import ru.xander.telebot.service.SettingService;
-import ru.xander.telebot.util.Sender;
 
 import java.util.Comparator;
 import java.util.Optional;

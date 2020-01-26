@@ -3,7 +3,7 @@ package ru.xander.telebot.action;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
-import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.sender.Sender;
 
 import java.nio.charset.Charset;
 import java.sql.Timestamp;

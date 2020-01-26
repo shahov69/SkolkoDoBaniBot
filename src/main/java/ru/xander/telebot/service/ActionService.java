@@ -40,7 +40,7 @@ import ru.xander.telebot.action.UnknownAction;
 import ru.xander.telebot.action.UnsetBanyaTimeAction;
 import ru.xander.telebot.action.WeatherAction;
 import ru.xander.telebot.dto.Request;
-import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.sender.Sender;
 
 import java.util.List;
 import java.util.Map;

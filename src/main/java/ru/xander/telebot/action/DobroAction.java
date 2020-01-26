@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.search.GoogleSearchResult;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.SearchService;
-import ru.xander.telebot.util.Sender;
 
 /**
  * @author Alexander Shakhov

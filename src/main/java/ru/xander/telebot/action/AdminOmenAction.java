@@ -6,7 +6,7 @@ import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Omen;
 import ru.xander.telebot.repository.OmenRepo;
-import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.util.Utils;
 
 import java.util.Optional;

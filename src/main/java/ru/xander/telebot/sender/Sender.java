@@ -1,4 +1,4 @@
-package ru.xander.telebot.util;
+package ru.xander.telebot.sender;
 
 import ru.xander.telebot.dto.MessageMode;
 

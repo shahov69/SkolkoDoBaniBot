@@ -6,10 +6,10 @@ import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.Ilushizm;
 import ru.xander.telebot.repository.IlushizmRepo;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.shizm.Poster;
 import ru.xander.telebot.shizm.PosterRenderer;
-import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
 import java.io.InputStream;

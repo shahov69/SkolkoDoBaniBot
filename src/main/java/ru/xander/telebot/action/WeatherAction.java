@@ -8,9 +8,9 @@ import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.dto.WeatherTexts;
 import ru.xander.telebot.entity.Omen;
 import ru.xander.telebot.repository.OmenRepo;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.ForecastService;
 import ru.xander.telebot.service.SettingService;
-import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
 import java.io.InputStream;

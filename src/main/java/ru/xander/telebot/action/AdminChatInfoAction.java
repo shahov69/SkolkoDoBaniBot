@@ -3,8 +3,8 @@ package ru.xander.telebot.action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.BanyaService;
-import ru.xander.telebot.util.Sender;
 
 import java.util.stream.Collectors;
 

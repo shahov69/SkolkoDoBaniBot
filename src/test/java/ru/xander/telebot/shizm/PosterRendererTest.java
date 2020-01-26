@@ -3,7 +3,7 @@ package ru.xander.telebot.shizm;
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
-import ru.xander.telebot.util.Fonts;
+import ru.xander.telebot.dto.Fonts;
 
 import java.awt.*;
 import java.io.File;

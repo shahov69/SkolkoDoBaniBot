@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Ilushizm;
 import ru.xander.telebot.repository.IlushizmRepo;
-import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.util.Utils;
 
 /**

@@ -3,7 +3,7 @@ package ru.xander.telebot.action;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Video;
 import ru.xander.telebot.dto.Request;
-import ru.xander.telebot.util.Sender;
+import ru.xander.telebot.sender.Sender;
 
 /**
  * @author Alexander Shakhov

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xander.telebot.sender.Sender;
+import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
-import ru.xander.telebot.util.Sender;
-import ru.xander.telebot.util.TelegramSender;
 
 /**
  * @author Alexander Shakhov

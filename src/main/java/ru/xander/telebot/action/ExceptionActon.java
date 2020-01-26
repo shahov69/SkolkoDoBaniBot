@@ -2,8 +2,8 @@ package ru.xander.telebot.action;
 
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.util.BotException;
-import ru.xander.telebot.util.Sender;
 import ru.xander.telebot.util.Utils;
 
 /**

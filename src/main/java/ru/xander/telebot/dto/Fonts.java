@@ -1,4 +1,6 @@
-package ru.xander.telebot.util;
+package ru.xander.telebot.dto;
+
+import ru.xander.telebot.util.Utils;
 
 import java.awt.*;
 
