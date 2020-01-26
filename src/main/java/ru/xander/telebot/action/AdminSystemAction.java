@@ -68,6 +68,8 @@ public class AdminSystemAction implements Action {
                     .append("/kirya_news {text} - отправить новость в виде кирюшизма (без персистенции)\n")
                     .append("----\n")
                     .append("/st {text} - отправить текст в банный чат\n")
+                    .append("/st_html {text} - отправить текст в банный чат в HTML-разметке\n")
+                    .append("/st_mark {text} - отправить текст в банный чат в MARKDOWN-разметке\n")
                     .append("/ss_{stickerId} - отправить стикер в банный чат\n")
                     .append("/sp_{photoId} - отправить фото в банный чат\n")
                     .append("/sv_{videoId} - отправить видео в банный чат\n")

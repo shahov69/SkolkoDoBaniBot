@@ -14,6 +14,7 @@ import ru.xander.telebot.action.AdminIlyaAction;
 import ru.xander.telebot.action.AdminKiryaAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
+import ru.xander.telebot.action.AdminSendAction;
 import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminSysParamAction;
 import ru.xander.telebot.action.AdminSystemAction;
@@ -110,6 +111,14 @@ public class ActionService {
             return actionMap.get(AdminIlyaAction.class);
         } else if (actionName.startsWith("/kirya_")) {
             return actionMap.get(AdminKiryaAction.class);
+        } else if (actionName.startsWith("/st ")
+                || actionName.startsWith("/st_html")
+                || actionName.startsWith("/st_mark")
+                || actionName.startsWith("/ss_")
+                || actionName.startsWith("/sp_")
+                || actionName.startsWith("/sv_")
+                || actionName.startsWith("/sd_")) {
+            return actionMap.get(AdminSendAction.class);
         }
         switch (actionName) {
             case "/omen":
