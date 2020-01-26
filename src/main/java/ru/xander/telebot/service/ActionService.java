@@ -13,6 +13,7 @@ import ru.xander.telebot.action.AdminChatInfoAction;
 import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminIlyaAction;
 import ru.xander.telebot.action.AdminKiryaAction;
+import ru.xander.telebot.action.AdminNotifyAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminSendAction;
@@ -143,6 +144,9 @@ public class ActionService {
             case "/sysparam":
             case "/sysdefault":
                 return actionMap.get(AdminSysParamAction.class);
+            case "/test_notify":
+            case "/test_notify_all":
+                return actionMap.get(AdminNotifyAction.class);
             case "/userinfo":
                 return actionMap.get(AdminUserInfoAction.class);
         }

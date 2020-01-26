@@ -34,7 +34,7 @@ public abstract class Utils {
     private static final Locale LOCALE_RU = Locale.forLanguageTag("RU");
     private static final Random random = new Random(Long.MAX_VALUE);
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String[] slavMonths = { "",
+    private static final String[] slavMonths = {"",
             "січня", "лютого", "березня",
             "квітня", "травня", "червня",
             "липня", "серпня", "вересня",
@@ -95,6 +95,10 @@ public abstract class Utils {
 
     public static Instant parseDate(String date, String format) {
         return Instant.from(DateTimeFormatter.ofPattern(format).withZone(ZONE_ID_MOSCOW).parse(date));
+    }
+
+    public static Instant createDate(long millis) {
+        return Instant.ofEpochMilli(millis).atZone(ZONE_ID_MOSCOW).toInstant();
     }
 
     public static int getDayId() {

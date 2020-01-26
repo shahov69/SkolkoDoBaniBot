@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
+import ru.xander.telebot.service.NotifyService;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Alexander Shakhov
@@ -23,13 +26,20 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final ActionService actionService;
+    private final NotifyService notifyService;
     private final Sender sender;
 
     @Autowired
-    public SkolkoDoBaniBot(ActionService actionService) {
+    public SkolkoDoBaniBot(ActionService actionService, NotifyService notifyService) {
         log.info("Start bot...");
         this.actionService = actionService;
+        this.notifyService = notifyService;
         this.sender = new TelegramSender(this);
+    }
+
+    @PostConstruct
+    public void init() {
+        this.notifyService.schedule(this.sender);
     }
 
     @Override
