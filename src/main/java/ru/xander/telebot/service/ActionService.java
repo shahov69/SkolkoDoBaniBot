@@ -15,6 +15,7 @@ import ru.xander.telebot.action.AdminKiryaAction;
 import ru.xander.telebot.action.AdminOmenAction;
 import ru.xander.telebot.action.AdminPhotoAction;
 import ru.xander.telebot.action.AdminSendAction;
+import ru.xander.telebot.action.AdminSetParamAction;
 import ru.xander.telebot.action.AdminStickerAction;
 import ru.xander.telebot.action.AdminSysParamAction;
 import ru.xander.telebot.action.AdminSystemAction;
@@ -123,6 +124,8 @@ public class ActionService {
         switch (actionName) {
             case "/omen":
                 return actionMap.get(AdminOmenAction.class);
+            case "/setparam":
+                return actionMap.get(AdminSetParamAction.class);
             case "/sys":
             case "/system":
                 return actionMap.get(AdminSystemAction.class);

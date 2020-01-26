@@ -46,6 +46,7 @@ public class AdminSystemAction implements Action {
                     .append("/sysparam - текущие значения всех параметров\n")
                     .append("/sysdefault - значения по умолчанию для всех параметров\n")
                     .append("/setparam {name} {value} - установить значение для параметра\n")
+                    .append("/setparam {name} null - установить пустое значение для параметра\n")
                     .append("/test_notify - тестировать нотификации от текущего момента\n")
                     .append("/test_notify_all - тестировать все нотифицкации\n")
                     .append("/userinfo - информация о пользователях\n")

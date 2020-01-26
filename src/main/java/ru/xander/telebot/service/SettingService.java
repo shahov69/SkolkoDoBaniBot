@@ -87,4 +87,14 @@ public class SettingService {
         }
         return Objects.equals(request.getUserId(), Integer.parseInt(adminId.getValue()));
     }
+
+    public void saveParam(String paramName, String paramValue) {
+        SettingName settingName = SettingName.valueOf(paramName);
+        Setting setting = settingRepo.findByName(settingName);
+        if (setting == null) {
+            throw new BotException("Параметра с именем " + paramName + " не существует!");
+        }
+        setting.setValue(paramValue);
+        settingRepo.save(setting);
+    }
 }
