@@ -10,6 +10,7 @@ import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
 import ru.xander.telebot.service.NotifyService;
+import ru.xander.telebot.util.Utils;
 
 import javax.annotation.PostConstruct;
 
@@ -24,6 +25,8 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     private String botUsername;
     @Value("${telegram.bot.token}")
     private String botToken;
+    @Value("${telegram.bot.chatId}")
+    private Long botChatId;
 
     private final ActionService actionService;
     private final NotifyService notifyService;
@@ -40,6 +43,7 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     @PostConstruct
     public void init() {
         this.notifyService.schedule(this.sender);
+        sendStatus();
     }
 
     @Override
@@ -63,4 +67,7 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
         return botToken;
     }
 
+    private void sendStatus() {
+        sender.sendText(botChatId, "Now: " + Utils.now());
+    }
 }
