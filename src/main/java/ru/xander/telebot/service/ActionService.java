@@ -23,6 +23,7 @@ import ru.xander.telebot.action.AdminSysParamAction;
 import ru.xander.telebot.action.AdminSystemAction;
 import ru.xander.telebot.action.AdminUserInfoAction;
 import ru.xander.telebot.action.AdminVideoAction;
+import ru.xander.telebot.action.DobroAction;
 import ru.xander.telebot.action.ExceptionActon;
 import ru.xander.telebot.action.FirstTimeAction;
 import ru.xander.telebot.action.HappyBirthDayAction;
@@ -163,6 +164,8 @@ public class ActionService {
         switch (actionName) {
             case "/add_ilya":
                 return actionMap.get(IlyaAddAction.class);
+            case "/dobro":
+                return actionMap.get(DobroAction.class);
             case "/happybyozday":
                 return actionMap.get(HappyBirthDayAction.class);
             case "/hello":
