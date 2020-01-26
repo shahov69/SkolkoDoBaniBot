@@ -51,6 +51,7 @@ public class AdminSystemAction implements Action {
                     .append("/test_notify_all - тестировать все нотифицкации\n")
                     .append("/userinfo - информация о пользователях\n")
                     .append("/chatinfo - информация о банном чате\n")
+                    .append("/happybyozday_test - тестировать стикеры для дня рождения бота\n")
                     .append("----\n")
                     .append("/ilya_acc_{id} - акцептировать илюшизм\n")
                     .append("/ilya_del_{id} - удалить илюшизм\n")

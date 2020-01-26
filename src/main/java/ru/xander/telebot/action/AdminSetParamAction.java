@@ -6,6 +6,9 @@ import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Sender;
 
+/**
+ * @author Alexander Shakhov
+ */
 @Component
 public class AdminSetParamAction implements Action {
 

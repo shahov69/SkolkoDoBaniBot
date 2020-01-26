@@ -3,6 +3,7 @@ package ru.xander.telebot.action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.Banya;
 import ru.xander.telebot.service.BanyaService;
 import ru.xander.telebot.util.Sender;
@@ -26,9 +27,10 @@ public class FirstTimeAction implements Action {
         banya.setChatName(request.getChatTitle());
         banya = banyaService.save(banya);
 
-        String message = String.format(
-                "Bot installed to chat %d (%s)\nCreated banya instance with id = %d",
-                request.getChatId(), request.getChatTitle(), banya.getId());
+        String message = "" +
+                "Bot installed to chat " + request.getChatId() + " (" + request.getChatTitle() + ")\n" +
+                "Created banya instance with id = " + banya.getId() + '\n' +
+                "/setparam " + SettingName.ACTIVE_CHAT_ID + ' ' + request.getChatId();
         sender.sendText(request.getBotChatId(), message);
     }
 }
