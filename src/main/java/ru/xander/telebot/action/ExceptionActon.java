@@ -28,9 +28,13 @@ public class ExceptionActon implements Action {
         if (!request.isBotChat()) {
             sender.sendSticker(request.getChatId(), "CAADBQADcwMAAukKyANgmywamaobRwI");
         }
-        String message = String.format(
-                "Exception from chat '%s':\n%s",
-                request.getChatTitle(), Utils.stackTraceToString(exception));
-        sender.sendText(request.getBotChatId(), message);
+        sender.sendText(request.getBotChatId(), "Exception from chat '" + request.getChatTitle() + "': " + exception.toString());
+        String stackTrace = Utils.stackTraceToString(exception);
+        int parts = (int) (stackTrace.length() / (double) Sender.MAX_MESSAGE_LENGTH);
+        for (int part = 0; part < parts; part++) {
+            int beginIndex = part * Sender.MAX_MESSAGE_LENGTH;
+            int endIndex = Math.min(stackTrace.length(), (part + 1) * Sender.MAX_MESSAGE_LENGTH);
+            sender.sendText(request.getBotChatId(), stackTrace.substring(beginIndex, endIndex));
+        }
     }
 }

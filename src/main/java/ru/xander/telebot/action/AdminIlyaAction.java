@@ -2,6 +2,7 @@ package ru.xander.telebot.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Ilushizm;
 import ru.xander.telebot.repository.IlushizmRepo;
@@ -136,10 +137,11 @@ public class AdminIlyaAction implements Action {
     private void sendIlushizms(Request request, Sender sender, List<Ilushizm> ilushizms) {
         StringBuilder out = new StringBuilder();
         for (Ilushizm ilushizm : ilushizms) {
-            String ilushizmInfo = ilushizm.getText() + "<code>by " + ilushizm.getCreator() + "</code>\n"
+            String ilushizmInfo = ilushizm.getText() + '\n' +
+                    "<code>by " + ilushizm.getCreator() + "</code>\n"
                     + (ilushizm.getAccepted() ? Utils.EMPTY_STRING : "/ilya_acc_" + ilushizm.getId() + "\n")
-                    + "/ilya_del_" + ilushizm.getId() + "\n"
-                    + "/ilya_test_" + ilushizm.getId() + "\n"
+                    + "/ilya_del_" + ilushizm.getId() + '\n'
+                    + "/ilya_test_" + ilushizm.getId() + '\n'
                     + "/ilya_send_" + ilushizm.getId();
             if ((out.length() + ilushizmInfo.length()) > Sender.MAX_MESSAGE_LENGTH) {
                 sender.sendText(request.getBotChatId(), out.toString());
@@ -148,7 +150,7 @@ public class AdminIlyaAction implements Action {
             out.append(ilushizmInfo);
         }
         if (out.length() > 0) {
-            sender.sendText(request.getBotChatId(), out.toString());
+            sender.sendText(request.getBotChatId(), out.toString(), MessageMode.HTML);
         }
     }
 

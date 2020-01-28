@@ -2,6 +2,7 @@ package ru.xander.telebot.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.xander.telebot.dto.Fonts;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.Kirushizm;
@@ -38,7 +39,7 @@ public class KiryaRandomAction implements Action {
                 try {
                     PosterRenderer renderer = new PosterRenderer();
                     Poster poster = Poster.getKiryaPoster();
-                    InputStream picture = renderer.render(poster, kirushizm.getText());
+                    InputStream picture = renderer.render(poster, kirushizm.getText(), Fonts.RETURN_TO_CLASSIC.getFont());
                     sender.sendPicture(request.getChatId(), "kirushizm_" + kirushizm.getId(), picture);
                 } catch (Exception e) {
                     sender.sendSticker(request.getChatId(), "CAADBQADfAMAAukKyAPfAAFRgAuYdNoC");

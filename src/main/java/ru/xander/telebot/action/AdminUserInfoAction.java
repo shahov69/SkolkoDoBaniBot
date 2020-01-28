@@ -3,6 +3,7 @@ package ru.xander.telebot.action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
+import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.UserService;
 
@@ -33,7 +34,7 @@ public class AdminUserInfoAction implements Action {
                             + ", isbot: " + user.getIsBot()
                             + ", lang: " + user.getLangCode()
                             + ", city: " + user.getCityId() + "\n"
-                            + "/setparam ADMIN_ID " + user.getId() + "\n"
+                            + "/setparam " + SettingName.ADMIN_ID + " " + user.getId() + "\n"
                             + "/setusercity_" + user.getId() + "_" + user.getCityId()
                     )
                     .collect(Collectors.joining("\n\n"));

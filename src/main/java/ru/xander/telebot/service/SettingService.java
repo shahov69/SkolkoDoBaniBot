@@ -1,6 +1,7 @@
 package ru.xander.telebot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.xander.telebot.dto.Request;
@@ -29,7 +30,7 @@ public class SettingService {
     }
 
     public List<Setting> getAll() {
-        return settingRepo.findAll();
+        return settingRepo.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     public String getString(SettingName settingName) {

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -42,6 +43,7 @@ import ru.xander.telebot.action.UnsetBanyaTimeAction;
 import ru.xander.telebot.action.WeatherAction;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.sender.Sender;
+import ru.xander.telebot.util.Utils;
 
 import java.util.List;
 import java.util.Map;
@@ -73,8 +75,8 @@ public class ActionService {
         try {
             Action action = resolveAction(update);
             if (action != null) {
-                log.debug("Execute action {}", action.getClass().getSimpleName());
                 Request request = prepareRequest(update);
+                log.info("Execute action {} (action name: {})", action.getClass().getSimpleName(), request.getActionName());
                 action.execute(request, sender);
             }
         } catch (Exception e) {
@@ -118,7 +120,7 @@ public class ActionService {
             return actionMap.get(AdminIlyaAction.class);
         } else if (actionName.startsWith("/kirya_")) {
             return actionMap.get(AdminKiryaAction.class);
-        } else if (actionName.startsWith("/st ")
+        } else if (actionName.startsWith("/st")
                 || actionName.startsWith("/st_html")
                 || actionName.startsWith("/st_mark")
                 || actionName.startsWith("/ss_")
@@ -199,7 +201,7 @@ public class ActionService {
 
     private boolean isFirstTime(Message message) {
         if (firstTimeChecked) {
-            return true;
+            return false;
         }
         firstTimeChecked = true;
         if (message.getNewChatMembers() != null) {
@@ -225,10 +227,20 @@ public class ActionService {
     }
 
     private String prepareActionName(String text) {
-        int firstSpace = text.indexOf(' ');
-        if (firstSpace > 0) {
-            return text.substring(0, firstSpace).trim().toLowerCase();
+        if (StringUtils.isEmpty(text)) {
+            return Utils.EMPTY_STRING;
         }
-        return text.trim().toLowerCase();
+        int firstSpace = text.indexOf(' ');
+        String actionName;
+        if (firstSpace > 0) {
+            actionName = text.substring(0, firstSpace).trim().toLowerCase();
+        } else {
+            actionName = text.trim().toLowerCase();
+        }
+        int at = actionName.indexOf('@');
+        if (at > 0) {
+            return actionName.substring(0, at);
+        }
+        return actionName;
     }
 }

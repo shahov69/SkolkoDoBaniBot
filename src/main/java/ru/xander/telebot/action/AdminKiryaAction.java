@@ -2,6 +2,7 @@ package ru.xander.telebot.action;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Kirushizm;
 import ru.xander.telebot.repository.KirushizmRepo;
@@ -74,11 +75,12 @@ public class AdminKiryaAction implements Action {
         kirushizm.setAccepted(request.isSuperUser());
         Kirushizm saved = kirushizmRepo.save(kirushizm);
 
-        String adminMessage = saved.getText() + "<code>by " + saved.getCreator() + "</code>\n"
-                + "/kirya_del_" + saved.getId() + "\n"
-                + "/kirya_test_" + saved.getId() + "\n"
+        String adminMessage = saved.getText() + '\n' +
+                "<code>by " + saved.getCreator() + "</code>\n"
+                + "/kirya_del_" + saved.getId() + '\n'
+                + "/kirya_test_" + saved.getId() + '\n'
                 + "/kirya_send_" + saved.getId();
-        sender.sendText(request.getBotChatId(), adminMessage);
+        sender.sendText(request.getBotChatId(), adminMessage, MessageMode.HTML);
     }
 
     private void deleteKirushizm(String[] params, Request request, Sender sender) {
@@ -135,9 +137,10 @@ public class AdminKiryaAction implements Action {
     private void sendKirushizms(Request request, Sender sender, List<Kirushizm> kirushizms) {
         StringBuilder out = new StringBuilder();
         for (Kirushizm kirushizm : kirushizms) {
-            String kirushizmInfo = kirushizm.getText() + "<code>by " + kirushizm.getCreator() + "</code>\n"
-                    + "/kirya_del_" + kirushizm.getId() + "\n"
-                    + "/kirya_test_" + kirushizm.getId() + "\n"
+            String kirushizmInfo = kirushizm.getText() + '\n'
+                    + "<code>by " + kirushizm.getCreator() + "</code>\n"
+                    + "/kirya_del_" + kirushizm.getId() + '\n'
+                    + "/kirya_test_" + kirushizm.getId() + '\n'
                     + "/kirya_send_" + kirushizm.getId();
             if ((out.length() + kirushizmInfo.length()) > Sender.MAX_MESSAGE_LENGTH) {
                 sender.sendText(request.getBotChatId(), out.toString());
@@ -146,7 +149,7 @@ public class AdminKiryaAction implements Action {
             out.append(kirushizmInfo);
         }
         if (out.length() > 0) {
-            sender.sendText(request.getBotChatId(), out.toString());
+            sender.sendText(request.getBotChatId(), out.toString(), MessageMode.HTML);
         }
     }
 

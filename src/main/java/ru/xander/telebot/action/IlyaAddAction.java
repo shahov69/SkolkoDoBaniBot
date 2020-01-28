@@ -1,7 +1,9 @@
 package ru.xander.telebot.action;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.entity.Ilushizm;
 import ru.xander.telebot.repository.IlushizmRepo;
@@ -12,6 +14,7 @@ import ru.xander.telebot.util.Utils;
  * @author Alexander Shakhov
  */
 @Component
+@Slf4j
 public class IlyaAddAction implements Action {
     private final IlushizmRepo ilushizmRepo;
 
@@ -42,13 +45,15 @@ public class IlyaAddAction implements Action {
                 sender.sendText(request.getChatId(), "Илюшизм успешно добавлен, но мне нужно согласовать это действие с Сашкой");
             }
 
-            String adminMessage = saved.getText() + "<code>by " + saved.getCreator() + "</code>\n"
+            String adminMessage = saved.getText() + '\n'
+                    + "<code>by " + saved.getCreator() + "</code>\n"
                     + (request.isSuperUser() ? Utils.EMPTY_STRING : "/ilya_acc_" + saved.getId() + "\n")
-                    + "/ilya_del_" + saved.getId() + "\n"
-                    + "/ilya_test_" + saved.getId() + "\n"
+                    + "/ilya_del_" + saved.getId() + '\n'
+                    + "/ilya_test_" + saved.getId() + '\n'
                     + "/ilya_send_" + saved.getId();
-            sender.sendText(request.getBotChatId(), adminMessage);
+            sender.sendText(request.getBotChatId(), adminMessage, MessageMode.HTML);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             sender.sendText(request.getChatId(), "Чот сломался я. Починить бы меня");
             sender.sendText(request.getBotChatId(), Utils.stackTraceToString(e));
         }

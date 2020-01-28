@@ -176,7 +176,7 @@ public class Poster {
         poster.bubbleTop = 430;
         poster.bubbleWidth = 410;
         poster.bubbleHeight = 190;
-        poster.bubbleColor = new int[]{0, 0, 0, 100};
+        poster.bubbleColor = new int[]{0, 0, 0, 150};
         poster.bubbleHAlign = HorizontalAlign.CENTER;
         poster.bubbleVAlign = VerticalAlign.MIDDLE;
         poster.textPadding = 20;

@@ -1,1 +1,1 @@
-worker: sh target/bin/worker
+worker: java $JAVA_OPTS -jar target/SkolkoDoBaniBot.jar $JAR_OPTS
