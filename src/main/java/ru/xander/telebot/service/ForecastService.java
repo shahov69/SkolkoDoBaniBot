@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.xander.telebot.dto.WeatherTexts;
 import ru.xander.telebot.forecast.Forecast;
 import ru.xander.telebot.forecast.ForecastRenderer;
 
@@ -52,8 +51,8 @@ public class ForecastService {
         return forecast;
     }
 
-    public InputStream getForecastRender(WeatherTexts weatherTexts) {
+    public InputStream getForecastRender() {
         Forecast forecast = getForecast();
-        return new ForecastRenderer().render(forecast, weatherTexts);
+        return new ForecastRenderer().render(forecast);
     }
 }

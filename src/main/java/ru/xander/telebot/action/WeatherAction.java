@@ -4,13 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.dto.Request;
-import ru.xander.telebot.dto.SettingName;
-import ru.xander.telebot.dto.WeatherTexts;
 import ru.xander.telebot.entity.Omen;
 import ru.xander.telebot.repository.OmenRepo;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.ForecastService;
-import ru.xander.telebot.service.SettingService;
 import ru.xander.telebot.util.Utils;
 
 import java.io.InputStream;
@@ -25,19 +22,16 @@ import java.util.Optional;
 public class WeatherAction implements Action {
     private final ForecastService forecastService;
     private final OmenRepo omenRepo;
-    private final SettingService settingService;
 
     @Autowired
-    public WeatherAction(ForecastService forecastService, OmenRepo omenRepo, SettingService settingService) {
+    public WeatherAction(ForecastService forecastService, OmenRepo omenRepo) {
         this.forecastService = forecastService;
         this.omenRepo = omenRepo;
-        this.settingService = settingService;
     }
 
     @Override
     public void execute(Request request, Sender sender) {
-        WeatherTexts weatherTexts = settingService.getJson(SettingName.TEXT_WEATHER, WeatherTexts.class);
-        InputStream forecastRender = forecastService.getForecastRender(weatherTexts);
+        InputStream forecastRender = forecastService.getForecastRender();
         String omen = prepareOmen();
         sender.sendPicture(request.getChatId(), "forecast", forecastRender, omen, MessageMode.HTML);
     }

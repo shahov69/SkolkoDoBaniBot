@@ -17,7 +17,6 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -39,6 +38,12 @@ public abstract class Utils {
             "квітня", "травня", "червня",
             "липня", "серпня", "вересня",
             "жовтня", "листопада", "грудня"
+    };
+    private static final String[] rusMonths = {"",
+            "января", "февраля", "марта",
+            "апреля", "мая", "июня",
+            "июля", "августа", "сентября",
+            "октября", "ноября", "декабря"
     };
 
     private Utils() {
@@ -117,6 +122,10 @@ public abstract class Utils {
                 .format(date);
     }
 
+    public static String formatRusDay(LocalDateTime dateTime) {
+        return dateTime.getDayOfMonth() + "-е " + rusMonths[dateTime.getMonthValue()];
+    }
+
     public static String formatSlavDay(int month, int day) {
         return day + "-е " + slavMonths[month];
     }
@@ -169,32 +178,6 @@ public abstract class Utils {
                 .replace("${MINUTES}", String.format("%.2f", inMunites))
                 .replace("${HOURS}", String.format("%.2f", inHours))
                 .replace("${DAYS}", String.format("%.2f", inDays));
-    }
-
-    public static List<String> getSplitPhrase(String phrase, int maxLength) {
-        List<String> result = new LinkedList<>();
-        int space = phrase.indexOf(' ');
-        int last = 0;
-        StringBuilder sub = new StringBuilder();
-        while (space > -1) {
-            int len = sub.length();
-            if ((len > 0) && ((len + space - last + 1) > maxLength)) {
-                result.add(sub.toString());
-                sub.setLength(0);
-            }
-            if (sub.length() > 0) {
-                sub.append(' ');
-            }
-            sub.append(phrase, last, space);
-            last = space + 1;
-            space = phrase.indexOf(' ', last);
-        }
-        if (sub.length() > 0) {
-            sub.append(' ');
-        }
-        sub.append(phrase, last, phrase.length());
-        result.add(sub.toString());
-        return result;
     }
 
     public static String stackTraceToString(Throwable throwable) {
