@@ -34,7 +34,7 @@ public class CrownRenderer {
             Crown crown = extract();
 
             final int width = 301;
-            final int height = 22 * (crown.getRegions().size() + 2) + 1;
+            final int height = 22 * (crown.getRegions().size() + 3) + 1;
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = image.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -49,7 +49,6 @@ public class CrownRenderer {
         } catch (Exception e) {
             throw new RuntimeException("Cannot render forecast: " + e.getMessage(), e);
         }
-
     }
 
     private void drawCrownTable(Graphics2D graphics, Crown crown, int width, int height) {
@@ -63,16 +62,16 @@ public class CrownRenderer {
 
         graphics.setColor(new Color(0xea, 0xec, 0xf0));
         graphics.fill(new Rectangle(0, 0, width, rowHeight));
-        graphics.fill(new Rectangle(0, height - rowHeight, width, height));
+        graphics.fill(new Rectangle(0, height - rowHeight * 2, width, height));
 
         graphics.setColor(new Color(0xa2, 0xa9, 0xb1));
-        for (int i = 0; i < (crown.getRegions().size() + 2); i++) {
+        for (int i = 0; i < (crown.getRegions().size() + 3); i++) {
             graphics.drawRect(0, i * rowHeight, width, (i + 1) * rowHeight);
         }
         graphics.drawRect(0, 0, width - 1, height - 1);
-        graphics.drawRect(width - 150, 0, 75, height);
+        graphics.drawRect(width - 150, 0, 75, height - rowHeight - 1);
 
-        graphics.setFont(Fonts.NEWS_CYCLE.getFont().deriveFont(14.0f));
+        graphics.setFont(Fonts.NEWS_CYCLE.getFont(14.0f));
         graphics.setColor(Color.BLACK);
         int item = 1;
         int totalConfirmed = 0;
@@ -87,15 +86,18 @@ public class CrownRenderer {
             item++;
         }
 
-        graphics.setFont(Fonts.NEWS_CYCLE.getFont().deriveFont(Font.BOLD, 14.0f));
+        graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 14.0f));
 
         graphics.drawString("Страна", col1, 17);
         graphics.drawString("Заражено", col2, 17);
         graphics.drawString("Смерти", col3, 17);
 
-        graphics.drawString("Всего", col1, height - 6);
-        graphics.drawString(String.valueOf(totalConfirmed), col2, height - 6);
-        graphics.drawString(String.valueOf(totalDeaths), col3, height - 6);
+        graphics.drawString("Всего", col1, height - 6 - rowHeight);
+        graphics.drawString(String.valueOf(totalConfirmed), col2, height - 6 - rowHeight);
+        graphics.drawString(String.valueOf(totalDeaths), col3, height - 6 - rowHeight);
+
+        double mortality = (totalDeaths / (double) totalConfirmed) * 100.0d;
+        graphics.drawString(String.format("Смертность = %.2f%%", mortality) , col1, height - 6);
     }
 
     private Crown extract() throws IOException {
@@ -147,6 +149,6 @@ public class CrownRenderer {
     }
 
     public static void main(String[] args) throws IOException {
-        IOUtils.copy(new CrownRenderer().render(), new FileOutputStream("D:\\crown.png"));
+        IOUtils.copy(new CrownRenderer().render(), new FileOutputStream("d:\\Sources\\.temp\\crown.png"));
     }
 }

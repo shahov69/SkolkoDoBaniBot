@@ -56,7 +56,7 @@ public class ForecastRenderer {
         final int phraseOffset = Math.max(dayPhrase.size() - 1, nightPhrase.size() - 1) * 20;
         final int trueWidth = WIDTH;
         final int trueHeight = HEIGHT + phraseOffset;
-        final Font font = Fonts.NEWS_CYCLE.getFont();
+        final Font font = Fonts.NEWS_CYCLE.getMediumFont();
 
         BufferedImage image = new BufferedImage(trueWidth, trueHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();

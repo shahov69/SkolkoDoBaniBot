@@ -5,7 +5,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import ru.xander.telebot.dto.Fonts;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,28 +33,39 @@ public class PosterRendererTest {
     @Test
     public void render() throws IOException {
         final Poster poster = Poster.getRandomIlyaPoster();
-        final Font font = Fonts.NEWS_CYCLE.getFont();
         for (HorizontalAlign horzAlign : HorizontalAlign.values()) {
             for (VerticalAlign verticalAlign : VerticalAlign.values()) {
                 String text = horzAlign + " " + verticalAlign;
                 String fileName = "ALIGN_" + text + ".jpg";
-                renderPoster(text, fileName, poster.bubbleHAlign(horzAlign).bubbleVAlign(verticalAlign), font);
+                renderPoster(text, fileName, poster.bubbleHAlign(horzAlign).bubbleVAlign(verticalAlign), Fonts.NEWS_CYCLE, true);
             }
         }
         for (int i = 0; i < samples.length; i++) {
             for (HorizontalAlign horzAlign : HorizontalAlign.values()) {
                 String fileName = "SAMPLE_" + (i + 1) + "_" + horzAlign + ".jpg";
-                renderPoster(samples[i], fileName, poster.textAlign(horzAlign), font);
+                renderPoster(samples[i], fileName, poster.textAlign(horzAlign), Fonts.NEWS_CYCLE, true);
             }
-        }
-        for (Fonts fonts : Fonts.values()) {
-            String fileName = "FONT_" + fonts + ".jpg";
-            renderPoster(samples[4], fileName, poster, fonts.getFont());
         }
     }
 
-    private static void renderPoster(String text, String fileName, Poster poster, Font font) throws IOException {
-        InputStream render = new PosterRenderer(true).render(poster, text, font);
-        IOUtils.copy(render, new FileOutputStream(new File(outPath, fileName)));
+    @Test
+    public void renderAllFonts() throws IOException {
+        int number = 13;
+//        for (Poster ilyaPoster : Poster.ilyaPosters) {
+        Poster ilyaPoster = Poster.getIlyaPoster(12);
+            for (Fonts fonts : Fonts.values()) {
+                renderPoster(samples[0], number + "_FONT_" + fonts + "_SMALL.jpg", ilyaPoster, fonts, false);
+                renderPoster(samples[2], number + "_FONT_" + fonts + "_MEDIUM.jpg", ilyaPoster, fonts, false);
+                renderPoster(samples[4], number + "_FONT_" + fonts + "_LARGE.jpg", ilyaPoster, fonts, false);
+            }
+            number++;
+//        }
+    }
+
+    private static void renderPoster(String text, String fileName, Poster poster, Fonts fonts, boolean debug) throws IOException {
+        File file = new File(outPath, fileName);
+        System.out.println("Save file: " + file.getAbsolutePath());
+        InputStream render = new PosterRenderer(debug).render(poster, text, fonts);
+        IOUtils.copy(render, new FileOutputStream(file));
     }
 }

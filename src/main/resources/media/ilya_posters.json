@@ -180,4 +180,17 @@
   "textAlign": "CENTER",
   "resource": "/media/ilya_14.jpg",
   "enabled": true
+},{
+  "bubbleLeft": 15,
+  "bubbleTop": 15,
+  "bubbleWidth": 180,
+  "bubbleHeight": 400,
+  "bubbleColor": [0, 0, 0, 100],
+  "bubbleHAlign": "CENTER",
+  "bubbleVAlign": "MIDDLE",
+  "textPadding": 20,
+  "textColor": [225, 255, 225, 225],
+  "textAlign": "LEFT",
+  "resource": "/media/ilya_15.jpg",
+  "enabled": true
 }]

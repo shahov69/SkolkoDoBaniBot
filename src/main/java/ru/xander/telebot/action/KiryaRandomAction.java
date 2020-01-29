@@ -39,7 +39,7 @@ public class KiryaRandomAction implements Action {
                 try {
                     PosterRenderer renderer = new PosterRenderer();
                     Poster poster = Poster.getKiryaPoster();
-                    InputStream picture = renderer.render(poster, kirushizm.getText(), Fonts.RETURN_TO_CLASSIC.getFont());
+                    InputStream picture = renderer.render(poster, kirushizm.getText(), Fonts.RETURN_TO_CLASSIC);
                     sender.sendPicture(request.getChatId(), "kirushizm_" + kirushizm.getId(), picture);
                 } catch (Exception e) {
                     sender.sendSticker(request.getChatId(), "CAADBQADfAMAAukKyAPfAAFRgAuYdNoC");

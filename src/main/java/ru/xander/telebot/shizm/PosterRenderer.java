@@ -30,15 +30,16 @@ public class PosterRenderer {
     }
 
     public InputStream render(Poster poster, String text) {
-        return render(poster, text, Fonts.getRandom().getFont());
+        return render(poster, text, Fonts.getRandom());
     }
 
-    public InputStream render(Poster poster, String text, Font font) {
+    public InputStream render(Poster poster, String text, Fonts fonts) {
         try {
             BufferedImage image = Utils.readResource(poster.getResource(), ImageIO::read);
             Graphics2D graphics = (Graphics2D) image.getGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
+            Font font = getFont(fonts, text);
             drawPoster(graphics, poster, text, font);
 
             graphics.dispose();
@@ -234,6 +235,16 @@ public class PosterRenderer {
                 break;
         }
         return bubbleTop;
+    }
+
+    private static Font getFont(Fonts fonts, String text) {
+        if (text.length() <= 20) {
+            return fonts.getLargeFont();
+        }
+        if (text.length() <= 100) {
+            return fonts.getMediumFont();
+        }
+        return fonts.getSmallFont();
     }
 
     private static Color getColor(int[] argb) {

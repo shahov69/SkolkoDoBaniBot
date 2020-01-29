@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Poster {
 
-    private static final List<Poster> ilyaPosters;
+    static final List<Poster> ilyaPosters;
     static final Poster defaultIlyaPoster;
     static final Poster defaultKiryaPoster;
 

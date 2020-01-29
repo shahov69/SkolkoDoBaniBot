@@ -32,7 +32,7 @@ public class DobroAction implements Action {
             switch (searchResult.getContentType()) {
                 case GIF:
                 case MP4:
-                    sender.sendDocument(request.getChatId(), dobroName, searchResult.getContent());
+                    sender.sendVideo(request.getChatId(), dobroName, searchResult.getContent());
                     break;
                 default:
                     sender.sendPicture(request.getChatId(), dobroName, searchResult.getContent());
