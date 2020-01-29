@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.xander.telebot.crown.CrownRenderer;
+import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
@@ -73,14 +74,15 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
 
     private void sendStatus(List<String> scheduledEvents) {
         sender.sendText(botChatId, "" +
-                "Now: " + Utils.now() + '\n' +
-                "---------------------------------------------\n" +
-                "Forecast service: " + checkForecastService() + '\n' +
-                "Search service: " + checkSearchService() + '\n' +
-                "Crown service: " + checkCrownService() + '\n' +
-                "---------------------------------------------\n" +
-                "Scheduled events:\n" +
-                String.join("\n", scheduledEvents));
+                        "<b>Now: " + Utils.now() + "</b>\n" +
+                        "---------------------------------------------\n" +
+                        "<code>Forecast service: " + checkForecastService() + '\n' +
+                        "Search service:         " + checkSearchService() + '\n' +
+                        "Crown service:          " + checkCrownService() + "</code>\n" +
+                        "---------------------------------------------\n" +
+                        "<b>Scheduled events:</b>\n" +
+                        (scheduledEvents.isEmpty() ? "<i>no events</i>" : String.join("\n", scheduledEvents)),
+                MessageMode.HTML);
     }
 
     @Autowired
