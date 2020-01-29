@@ -142,7 +142,7 @@ public class AdminIlyaAction implements Action {
                     + (ilushizm.getAccepted() ? Utils.EMPTY_STRING : "/ilya_acc_" + ilushizm.getId() + "\n")
                     + "/ilya_del_" + ilushizm.getId() + '\n'
                     + "/ilya_test_" + ilushizm.getId() + '\n'
-                    + "/ilya_send_" + ilushizm.getId();
+                    + "/ilya_send_" + ilushizm.getId() + '\n';
             if ((out.length() + ilushizmInfo.length()) > Sender.MAX_MESSAGE_LENGTH) {
                 sender.sendText(request.getBotChatId(), out.toString());
                 out.setLength(0);

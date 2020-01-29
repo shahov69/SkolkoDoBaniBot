@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xander.telebot.crown.CrownRenderer;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
+import ru.xander.telebot.service.ForecastService;
 import ru.xander.telebot.service.NotifyService;
+import ru.xander.telebot.service.SearchService;
 import ru.xander.telebot.util.Utils;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * @author Alexander Shakhov
@@ -42,8 +46,8 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
 
     @PostConstruct
     public void init() {
-        this.notifyService.schedule(this.sender);
-        sendStatus();
+        List<String> scheduledEvents = this.notifyService.schedule(this.sender);
+        sendStatus(scheduledEvents);
     }
 
     @Override
@@ -67,7 +71,48 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
         return botToken;
     }
 
-    private void sendStatus() {
-        sender.sendText(botChatId, "Now: " + Utils.now());
+    private void sendStatus(List<String> scheduledEvents) {
+        sender.sendText(botChatId, "" +
+                "Now: " + Utils.now() + '\n' +
+                "---------------------------------------------\n" +
+                "Forecast service: " + checkForecastService() + '\n' +
+                "Search service: " + checkSearchService() + '\n' +
+                "Crown service: " + checkCrownService() + '\n' +
+                "---------------------------------------------\n" +
+                "Scheduled events:\n" +
+                String.join("\n", scheduledEvents));
+    }
+
+    @Autowired
+    private ForecastService forecastService;
+
+    private String checkForecastService() {
+        try {
+            forecastService.getForecastRender();
+            return "✅";
+        } catch (Exception e) {
+            return "❌ " + e.getMessage();
+        }
+    }
+
+    @Autowired
+    private SearchService searchService;
+
+    private String checkSearchService() {
+        try {
+            searchService.searchDobro();
+            return "✅";
+        } catch (Exception e) {
+            return "❌ " + e.getMessage();
+        }
+    }
+
+    private String checkCrownService() {
+        try {
+            new CrownRenderer().render();
+            return "✅";
+        } catch (Exception e) {
+            return "❌ " + e.getMessage();
+        }
     }
 }

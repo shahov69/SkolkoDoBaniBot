@@ -79,7 +79,7 @@ public class AdminKiryaAction implements Action {
                 "<code>by " + saved.getCreator() + "</code>\n"
                 + "/kirya_del_" + saved.getId() + '\n'
                 + "/kirya_test_" + saved.getId() + '\n'
-                + "/kirya_send_" + saved.getId();
+                + "/kirya_send_" + saved.getId() + '\n';
         sender.sendText(request.getBotChatId(), adminMessage, MessageMode.HTML);
     }
 

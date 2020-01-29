@@ -12,6 +12,8 @@ import ru.xander.telebot.repository.BanyaRepo;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.util.Utils;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,16 +39,18 @@ public class NotifyService {
         this.timer = new Timer();
     }
 
-    public void schedule(Sender sender) {
+    public List<String> schedule(Sender sender) {
+        List<String> scheduledEvents = new LinkedList<>();
         String howMuchTemplate = settingService.getString(SettingName.TEXT_HOWMUCH_BEFORE);
         this.banyaRepo.findByStartAfter(Utils.now()).forEach(banya -> {
             for (NotifyEvent notifyEvent : NotifyEvent.getAllEvent()) {
-                scheduleNotify(banya, notifyEvent, sender, howMuchTemplate);
+                scheduleNotify(banya, notifyEvent, sender, howMuchTemplate, scheduledEvents);
             }
         });
+        return scheduledEvents;
     }
 
-    private void scheduleNotify(Banya banya, NotifyEvent notifyEvent, Sender sender, String howMuchTemplate) {
+    private void scheduleNotify(Banya banya, NotifyEvent notifyEvent, Sender sender, String howMuchTemplate, List<String> scheduledEvents) {
         long banyaStart = banya.getStart().toEpochMilli();
         long currentTime = System.currentTimeMillis();
         long delay = banyaStart - currentTime - notifyEvent.getLag() + CORRECTION;
@@ -57,6 +61,7 @@ public class NotifyService {
             // так что дальние евенты обязательно добавятся позже. нет смысла их сейчас добавлять
             return;
         }
+        scheduledEvents.add(banya.getChatId() + ": " + notifyEvent.name());
         timer.schedule(new NotifyTask(sender, banya.getChatId(), howMuchTemplate, notifyEvent), delay);
     }
 
