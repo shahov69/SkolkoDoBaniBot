@@ -33,7 +33,7 @@ public class CrownRenderer {
         try {
             Crown crown = extract();
 
-            final int width = 301;
+            final int width = 376;
             final int height = 22 * (crown.getRegions().size() + 3) + 1;
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = image.createGraphics();
@@ -56,6 +56,7 @@ public class CrownRenderer {
         final int col1 = 4;
         final int col2 = 154;
         final int col3 = 229;
+        final int col4 = 304;
 
         graphics.setColor(new Color(0xf8, 0xf9, 0xfa));
         graphics.fill(new Rectangle(0, 0, width, height));
@@ -69,20 +70,30 @@ public class CrownRenderer {
             graphics.drawRect(0, i * rowHeight, width, (i + 1) * rowHeight);
         }
         graphics.drawRect(0, 0, width - 1, height - 1);
-        graphics.drawRect(width - 150, 0, 75, height - rowHeight - 1);
+        graphics.drawRect(0, 0, 150, height - rowHeight - 1);
+        graphics.drawRect(225, 0, 75, height - rowHeight - 1);
 
         graphics.setFont(Fonts.NEWS_CYCLE.getFont(14.0f));
         graphics.setColor(Color.BLACK);
         int item = 1;
         int totalConfirmed = 0;
         int totalDeaths = 0;
+        int totalRecoveries = 0;
         for (Crown.Region region : crown.getRegions()) {
             graphics.drawString(region.getName(), col1, item * rowHeight + 17);
             graphics.drawImage(region.getFlag(), col2 - 30, item * rowHeight + 3, 23, 15, Color.WHITE, null);
-            graphics.drawString(String.valueOf(region.getConfirmed()), col2, item * rowHeight + 17);
-            graphics.drawString(String.valueOf(region.getDeaths()), col3, item * rowHeight + 17);
-            totalConfirmed += region.getConfirmed();
-            totalDeaths += region.getDeaths();
+            if (region.getConfirmed() != null) {
+                graphics.drawString(String.valueOf(region.getConfirmed()), col2, item * rowHeight + 17);
+                totalConfirmed += region.getConfirmed();
+            }
+            if (region.getDeaths() != null) {
+                graphics.drawString(String.valueOf(region.getDeaths()), col3, item * rowHeight + 17);
+                totalDeaths += region.getDeaths();
+            }
+            if (region.getRecoveries() != null) {
+                graphics.drawString(String.valueOf(region.getRecoveries()), col4, item * rowHeight + 17);
+                totalRecoveries += region.getRecoveries();
+            }
             item++;
         }
 
@@ -91,10 +102,12 @@ public class CrownRenderer {
         graphics.drawString("Страна", col1, 17);
         graphics.drawString("Заражено", col2, 17);
         graphics.drawString("Смерти", col3, 17);
+        graphics.drawString("Вылечено", col4, 17);
 
         graphics.drawString("Всего", col1, height - 6 - rowHeight);
         graphics.drawString(String.valueOf(totalConfirmed), col2, height - 6 - rowHeight);
         graphics.drawString(String.valueOf(totalDeaths), col3, height - 6 - rowHeight);
+        graphics.drawString(String.valueOf(totalRecoveries), col4, height - 6 - rowHeight);
 
         double mortality = (totalDeaths / (double) totalConfirmed) * 100.0d;
         graphics.drawString(String.format("Смертность = %.2f%%", mortality) , col1, height - 6);
@@ -114,9 +127,11 @@ public class CrownRenderer {
                         region.setFlag(getFlag(td));
                         region.setName(td.text().replace(" ", Utils.EMPTY_STRING).trim());
                     } else if (item == 1) {
-                        region.setConfirmed(Integer.parseInt(td.text().replace(",", Utils.EMPTY_STRING)));
+                        region.setConfirmed(parseInteger(td));
                     } else if (item == 2) {
-                        region.setDeaths(Integer.parseInt(td.text().replace(",", Utils.EMPTY_STRING)));
+                        region.setDeaths(parseInteger(td));
+                    } else if (item == 3) {
+                        region.setRecoveries(parseInteger(td));
                         break;
                     }
                     item++;
@@ -146,6 +161,14 @@ public class CrownRenderer {
             }
         }
         return null;
+    }
+
+    private static Integer parseInteger(Element td) {
+        String value = td.text().replace(",", Utils.EMPTY_STRING).trim();
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return Integer.parseInt(value);
     }
 
     public static void main(String[] args) throws IOException {

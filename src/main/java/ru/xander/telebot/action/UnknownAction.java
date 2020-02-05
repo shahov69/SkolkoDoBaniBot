@@ -48,6 +48,9 @@ public class UnknownAction implements Action {
 
     @Override
     public void execute(Request request, Sender sender) {
+        if (request.isBotChat()) {
+            return;
+        }
         if (request.isSuperUser()) {
             sender.sendSticker(request.getChatId(), "CAADAgADGAAD5NdGDj8TYTfHnZ7gAg");
         } else {

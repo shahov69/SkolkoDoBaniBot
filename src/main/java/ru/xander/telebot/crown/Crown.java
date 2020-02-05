@@ -23,8 +23,8 @@ public class Crown {
     public static class Region {
         private Image flag;
         private String name;
-        private int confirmed;
-        private int deaths;
-        private int recovered;
+        private Integer confirmed;
+        private Integer deaths;
+        private Integer recoveries;
     }
 }

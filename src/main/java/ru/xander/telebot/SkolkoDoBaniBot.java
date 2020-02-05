@@ -75,11 +75,13 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     private void sendStatus(List<String> scheduledEvents) {
         sender.sendText(botChatId, "" +
                         "<b>Now: " + Utils.now() + "</b>\n" +
-                        "---------------------------------------------\n" +
-                        "<code>Forecast service: " + checkForecastService() + '\n' +
+                        "<code>" +
+                        "---------------------------\n" +
+                        "Forecast service:       " + checkForecastService() + '\n' +
                         "Search service:         " + checkSearchService() + '\n' +
-                        "Crown service:          " + checkCrownService() + "</code>\n" +
-                        "---------------------------------------------\n" +
+                        "Crown service:          " + checkCrownService() + "\n" +
+                        "---------------------------" +
+                        "</code>\n" +
                         "<b>Scheduled events:</b>\n" +
                         (scheduledEvents.isEmpty() ? "<i>no events</i>" : String.join("\n", scheduledEvents)),
                 MessageMode.HTML);
