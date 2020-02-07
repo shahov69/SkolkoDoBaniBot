@@ -82,15 +82,21 @@ public class CrownRenderer {
         for (Crown.Region region : crown.getRegions()) {
             graphics.drawString(region.getName(), col1, item * rowHeight + 17);
             graphics.drawImage(region.getFlag(), col2 - 30, item * rowHeight + 3, 23, 15, Color.WHITE, null);
-            if (region.getConfirmed() != null) {
+            if (region.getConfirmed() == null) {
+                graphics.drawString("###", col2, item * rowHeight + 17);
+            } else if (region.getConfirmed() > 0) {
                 graphics.drawString(String.valueOf(region.getConfirmed()), col2, item * rowHeight + 17);
                 totalConfirmed += region.getConfirmed();
             }
-            if (region.getDeaths() != null) {
+            if (region.getDeaths() == null) {
+                graphics.drawString("###", col3, item * rowHeight + 17);
+            } else if (region.getDeaths() > 0) {
                 graphics.drawString(String.valueOf(region.getDeaths()), col3, item * rowHeight + 17);
                 totalDeaths += region.getDeaths();
             }
-            if (region.getRecoveries() != null) {
+            if (region.getRecoveries() == null) {
+                graphics.drawString("###", col4, item * rowHeight + 17);
+            } else if (region.getRecoveries() > 0) {
                 graphics.drawString(String.valueOf(region.getRecoveries()), col4, item * rowHeight + 17);
                 totalRecoveries += region.getRecoveries();
             }
@@ -110,7 +116,7 @@ public class CrownRenderer {
         graphics.drawString(String.valueOf(totalRecoveries), col4, height - 6 - rowHeight);
 
         double mortality = (totalDeaths / (double) totalConfirmed) * 100.0d;
-        graphics.drawString(String.format("Смертность = %.2f%%", mortality) , col1, height - 6);
+        graphics.drawString(String.format("Смертность = %.2f%%", mortality), col1, height - 6);
     }
 
     private Crown extract() throws IOException {
@@ -125,7 +131,7 @@ public class CrownRenderer {
                 for (Element td : tr.getElementsByTag("td")) {
                     if (item == 0) {
                         region.setFlag(getFlag(td));
-                        region.setName(td.text().replace(" ", Utils.EMPTY_STRING).trim());
+                        region.setName(getName(td));
                     } else if (item == 1) {
                         region.setConfirmed(parseInteger(td));
                     } else if (item == 2) {
@@ -143,6 +149,14 @@ public class CrownRenderer {
         }
         crown.setRegions(regions);
         return crown;
+    }
+
+    private String getName(Element td) {
+        String name = td.text().replace(" ", Utils.EMPTY_STRING).trim();
+        if (name.toUpperCase().contains("DIAMOND")) {
+            return "Diamond Princess";
+        }
+        return name;
     }
 
     private Image getFlag(Element td) throws IOException {
@@ -164,11 +178,19 @@ public class CrownRenderer {
     }
 
     private static Integer parseInteger(Element td) {
-        String value = td.text().replace(",", Utils.EMPTY_STRING).trim();
-        if (StringUtils.isEmpty(value)) {
+        try {
+            String value = td.text().replace(",", Utils.EMPTY_STRING).trim();
+            if (StringUtils.isEmpty(value)) {
+                return 0;
+            }
+            int space = value.indexOf(' ');
+            if (space > 0) {
+                return Integer.parseInt(value.substring(0, space).trim());
+            }
+            return Integer.parseInt(value);
+        } catch (Exception e) {
             return null;
         }
-        return Integer.parseInt(value);
     }
 
     public static void main(String[] args) throws IOException {
