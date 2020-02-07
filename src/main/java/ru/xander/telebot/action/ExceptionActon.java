@@ -1,5 +1,6 @@
 package ru.xander.telebot.action;
 
+import io.sentry.Sentry;
 import org.springframework.stereotype.Component;
 import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.sender.Sender;
@@ -24,6 +25,8 @@ public class ExceptionActon implements Action {
             sender.sendText(request.getBotChatId(), exception.getMessage());
             return;
         }
+
+        Sentry.capture(exception);
 
         if (!request.isBotChat()) {
             sender.sendSticker(request.getChatId(), "CAADBQADcwMAAukKyANgmywamaobRwI");

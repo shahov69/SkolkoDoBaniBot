@@ -1,5 +1,6 @@
 package ru.xander.telebot;
 
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,18 +74,23 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
     }
 
     private void sendStatus(List<String> scheduledEvents) {
-        sender.sendText(botChatId, "" +
-                        "<b>Now: " + Utils.now() + "</b>\n" +
-                        "<code>" +
-                        "---------------------------\n" +
-                        "Forecast service:       " + checkForecastService() + '\n' +
-                        "Search service:         " + checkSearchService() + '\n' +
-                        "Crown service:          " + checkCrownService() + "\n" +
-                        "---------------------------" +
-                        "</code>\n" +
-                        "<b>Scheduled events:</b>\n" +
-                        (scheduledEvents.isEmpty() ? "<i>no events</i>" : String.join("\n", scheduledEvents)),
-                MessageMode.HTML);
+        String statusMessage = prepareStatusMessage(scheduledEvents);
+        Sentry.capture(statusMessage);
+        sender.sendText(botChatId, statusMessage, MessageMode.HTML);
+    }
+
+    private String prepareStatusMessage(List<String> scheduledEvents) {
+        return "" +
+                "<b>Now: " + Utils.formatDate(Utils.now(), "yyyy'-'MM'-'dd HH':'mm':'ss'.'SSS") + "</b>\n" +
+                "<code>" +
+                "---------------------------\n" +
+                "Forecast service:       " + checkForecastService() + '\n' +
+                "Search service:         " + checkSearchService() + '\n' +
+                "Crown service:          " + checkCrownService() + "\n" +
+                "---------------------------" +
+                "</code>\n" +
+                "<b>Scheduled events:</b>\n" +
+                (scheduledEvents.isEmpty() ? "<i>no events</i>" : String.join("\n", scheduledEvents));
     }
 
     @Autowired
