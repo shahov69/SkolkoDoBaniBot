@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +29,15 @@ public class CrownRenderer {
 
     private static final String DATASOURCE = "https://en.wikipedia.org/wiki/2019%E2%80%9320_Wuhan_coronavirus_outbreak_by_country_and_territory";
     private static final int TIMEOUT_MILLIS = 10000;
+    private static final DecimalFormat format;
     private final ConcurrentHashMap<String, Image> flagsCache = new ConcurrentHashMap<>();
+
+    static {
+        format = new DecimalFormat("#,###");
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+        symbols.setGroupingSeparator(' ');
+        format.setDecimalFormatSymbols(symbols);
+    }
 
     public InputStream render() {
         try {
@@ -54,9 +64,10 @@ public class CrownRenderer {
     private void drawCrownTable(Graphics2D graphics, Crown crown, int width, int height) {
         final int rowHeight = 22;
         final int col1 = 4;
-        final int col2 = 154;
-        final int col3 = 229;
-        final int col4 = 304;
+        final int colWidth = 75;
+        final int col2 = 150;
+        final int col3 = col2 + colWidth;
+        final int col4 = col3 + colWidth;
 
         graphics.setColor(new Color(0xf8, 0xf9, 0xfa));
         graphics.fill(new Rectangle(0, 0, width, height));
@@ -75,6 +86,7 @@ public class CrownRenderer {
 
         graphics.setFont(Fonts.NEWS_CYCLE.getFont(14.0f));
         graphics.setColor(Color.BLACK);
+
         int item = 1;
         int totalConfirmed = 0;
         int totalDeaths = 0;
@@ -82,22 +94,19 @@ public class CrownRenderer {
         for (Crown.Region region : crown.getRegions()) {
             graphics.drawString(region.getName(), col1, item * rowHeight + 17);
             graphics.drawImage(region.getFlag(), col2 - 30, item * rowHeight + 3, 23, 15, Color.WHITE, null);
-            if (region.getConfirmed() == null) {
-                graphics.drawString("###", col2, item * rowHeight + 17);
-            } else if (region.getConfirmed() > 0) {
-                graphics.drawString(String.valueOf(region.getConfirmed()), col2, item * rowHeight + 17);
+
+            final int y = item * rowHeight + 17;
+            drawIntFormatted(graphics, region.getConfirmed(), col3, y);
+            drawIntFormatted(graphics, region.getDeaths(), col4, y);
+            drawIntFormatted(graphics, region.getRecoveries(), width, y);
+
+            if ((region.getConfirmed() != null) && (region.getConfirmed() > 0)) {
                 totalConfirmed += region.getConfirmed();
             }
-            if (region.getDeaths() == null) {
-                graphics.drawString("###", col3, item * rowHeight + 17);
-            } else if (region.getDeaths() > 0) {
-                graphics.drawString(String.valueOf(region.getDeaths()), col3, item * rowHeight + 17);
+            if ((region.getDeaths() != null) && (region.getDeaths() > 0)) {
                 totalDeaths += region.getDeaths();
             }
-            if (region.getRecoveries() == null) {
-                graphics.drawString("###", col4, item * rowHeight + 17);
-            } else if (region.getRecoveries() > 0) {
-                graphics.drawString(String.valueOf(region.getRecoveries()), col4, item * rowHeight + 17);
+            if ((region.getRecoveries() != null) && (region.getRecoveries() > 0)) {
                 totalRecoveries += region.getRecoveries();
             }
             item++;
@@ -106,14 +115,16 @@ public class CrownRenderer {
         graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 14.0f));
 
         graphics.drawString("Страна", col1, 17);
-        graphics.drawString("Заражено", col2, 17);
-        graphics.drawString("Смерти", col3, 17);
-        graphics.drawString("Вылечено", col4, 17);
+        graphics.drawString("Заражено", col2 + 4, 17);
+        graphics.drawString("Смерти", col3 + 4, 17);
+        graphics.drawString("Вылечено", col4 + 4, 17);
 
         graphics.drawString("Всего", col1, height - 6 - rowHeight);
-        graphics.drawString(String.valueOf(totalConfirmed), col2, height - 6 - rowHeight);
-        graphics.drawString(String.valueOf(totalDeaths), col3, height - 6 - rowHeight);
-        graphics.drawString(String.valueOf(totalRecoveries), col4, height - 6 - rowHeight);
+
+        final int lastRowY = height - 6 - rowHeight;
+        drawIntFormatted(graphics, totalConfirmed, col3, lastRowY);
+        drawIntFormatted(graphics, totalDeaths, col4, lastRowY);
+        drawIntFormatted(graphics, totalRecoveries, width, lastRowY);
 
         double mortality = (totalDeaths / (double) totalConfirmed) * 100.0d;
         graphics.drawString(String.format("Смертность = %.2f%%", mortality), col1, height - 6);
@@ -160,6 +171,13 @@ public class CrownRenderer {
         return crown;
     }
 
+    private void drawIntFormatted(Graphics2D graphics, Integer value, int right, int y) {
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        String formatted = formatInteger(value);
+        int x = right - fontMetrics.stringWidth(formatted) - 4;
+        graphics.drawString(formatted, x, y);
+    }
+
     private String getName(Element td) {
         String name = td.text()
 //                .replace(" ", Utils.EMPTY_STRING)
@@ -204,6 +222,16 @@ public class CrownRenderer {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private static String formatInteger(Integer integer) {
+        if (integer == null) {
+            return "###";
+        }
+        if (integer <= 0) {
+            return "";
+        }
+        return format.format(integer);
     }
 
     public static void main(String[] args) throws IOException {
