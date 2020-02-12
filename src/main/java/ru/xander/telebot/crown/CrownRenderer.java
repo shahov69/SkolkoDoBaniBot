@@ -124,11 +124,20 @@ public class CrownRenderer {
         LinkedList<Crown.Region> regions = new LinkedList<>();
         Document document = Jsoup.parse(new URL(DATASOURCE), TIMEOUT_MILLIS);
         Element table = document.getElementsByAttributeValueStarting("class", "wikitable").first();
+        boolean first = true;
         for (Element tr : table.getElementsByTag("tr")) {
+            if (first) {
+                // скипаем первую строку
+                first = false;
+                continue;
+            }
             if (StringUtils.isEmpty(tr.attr("class"))) {
                 Crown.Region region = new Crown.Region();
                 int item = 0;
-                for (Element td : tr.getElementsByTag("td")) {
+                for (Element td : tr.children()) {
+                    if (!"td".equals(td.tagName()) && !"th".equals(td.tagName())) {
+                        continue;
+                    }
                     if (item == 0) {
                         region.setFlag(getFlag(td));
                         region.setName(getName(td));
@@ -152,7 +161,11 @@ public class CrownRenderer {
     }
 
     private String getName(Element td) {
-        String name = td.text().replace(" ", Utils.EMPTY_STRING).trim();
+        String name = td.text()
+//                .replace(" ", Utils.EMPTY_STRING)
+                .replace("&nbsp;", " ")
+                .replaceAll("(\\[(.*?)\\]|\\((.*?)\\))", Utils.EMPTY_STRING)
+                .trim();
         if (name.toUpperCase().contains("DIAMOND")) {
             return "Diamond Princess";
         }
@@ -179,7 +192,7 @@ public class CrownRenderer {
 
     private static Integer parseInteger(Element td) {
         try {
-            String value = td.text().replace(",", Utils.EMPTY_STRING).trim();
+            String value = td.text().replaceAll("[^\\d]", Utils.EMPTY_STRING).trim();
             if (StringUtils.isEmpty(value)) {
                 return 0;
             }
