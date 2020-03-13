@@ -9,6 +9,7 @@ import ru.xander.telebot.dto.Request;
 import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.service.SettingService;
+import ru.xander.telebot.util.Utils;
 
 import java.io.InputStream;
 
@@ -34,12 +35,14 @@ public class CrownAction implements Action {
 
         int offset = getOffset(request);
 
+        String filename = "crown_" + Utils.formatDate(Utils.now(), "yyyyMMdd_hhmmss") + ".png";
+
         Crown crown = extractor.extract();
         InputStream crownRender = renderer.render(crown, offset);
         if (offset < 1) {
-            sender.sendDocument(request.getChatId(), "crown", crownRender);
+            sender.sendDocument(request.getChatId(), filename, crownRender);
         } else {
-            sender.sendPicture(request.getChatId(), "crown", crownRender);
+            sender.sendPicture(request.getChatId(), filename, crownRender);
         }
     }
 
