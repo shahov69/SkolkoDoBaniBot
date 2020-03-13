@@ -16,6 +16,7 @@ import java.text.DecimalFormatSymbols;
  */
 public class CrownRenderer {
 
+    public static final int DEFAULT_CROWN_LIMIT = 50;
     private static final DecimalFormat format;
     private static final int rowHeight = 22;
     private static final int[] cols = {0, 50, 225, 300, 375, 450, 525};
@@ -27,7 +28,7 @@ public class CrownRenderer {
         format.setDecimalFormatSymbols(symbols);
     }
 
-    private int visibleRows = 50;
+    private int visibleRows = DEFAULT_CROWN_LIMIT;
 
     public void setVisibleRows(int visibleRows) {
         this.visibleRows = Math.max(visibleRows, 10);
