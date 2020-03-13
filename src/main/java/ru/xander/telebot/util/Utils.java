@@ -200,6 +200,19 @@ public abstract class Utils {
         }
     }
 
+    public static int compareInteger(Integer i1, Integer i2) {
+        if ((i1 == null) && (i2 == null)) {
+            return 0;
+        }
+        if (i1 == null) {
+            return -1;
+        }
+        if (i2 == null) {
+            return 1;
+        }
+        return Integer.compare(i1, i2);
+    }
+
     public static <T> T readResource(String resourceName, ResourceReader<T> resourceReader) {
         try (InputStream resource = Utils.class.getResourceAsStream(resourceName)) {
             return resourceReader.apply(resource);
