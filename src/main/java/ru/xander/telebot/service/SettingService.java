@@ -11,6 +11,7 @@ import ru.xander.telebot.repository.SettingRepo;
 import ru.xander.telebot.util.BotException;
 import ru.xander.telebot.util.Utils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,6 +61,14 @@ public class SettingService {
             return null;
         }
         return Long.parseLong(value);
+    }
+
+    public LocalDate getLocalDate(SettingName settingName, String format) {
+        String value = getString(settingName);
+        if (StringUtils.isEmpty(value)) {
+            return null;
+        }
+        return Utils.parseLocalDate(value, format);
     }
 
     public <T> T getJson(SettingName settingName, Class<T> clazz) {

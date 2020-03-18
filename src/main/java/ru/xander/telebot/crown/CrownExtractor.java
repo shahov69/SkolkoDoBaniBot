@@ -30,7 +30,7 @@ public class CrownExtractor {
     /**
      * Метод для тестов
      */
-    void setFlagExtractor(FlagExtractor flagExtractor) {
+    public void setFlagExtractor(FlagExtractor flagExtractor) {
         this.flagExtractor = flagExtractor;
     }
 

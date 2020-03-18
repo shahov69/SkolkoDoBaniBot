@@ -1,13 +1,10 @@
 package ru.xander.telebot.crown;
 
 import org.apache.commons.io.IOUtils;
-import org.jsoup.nodes.Element;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -53,19 +50,5 @@ public class CrownRendererTest {
     private void assertRange(CrownRenderer.Range range, int start, int end) {
         Assert.assertEquals(start, range.start);
         Assert.assertEquals(end, range.end);
-    }
-
-    private static class TestFlagExtractor implements CrownExtractor.FlagExtractor {
-
-        private final Image flag;
-
-        TestFlagExtractor() throws IOException {
-            flag = ImageIO.read(getClass().getResourceAsStream("/flag.png"));
-        }
-
-        @Override
-        public Image extractFlag(Element flagElement) {
-            return flag;
-        }
     }
 }

@@ -102,6 +102,10 @@ public abstract class Utils {
         return Instant.from(DateTimeFormatter.ofPattern(format).withZone(ZONE_ID_MOSCOW).parse(date));
     }
 
+    public static LocalDate parseLocalDate(String date, String format) {
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+    }
+
     public static Instant createDate(long millis) {
         return Instant.ofEpochMilli(millis).atZone(ZONE_ID_MOSCOW).toInstant();
     }

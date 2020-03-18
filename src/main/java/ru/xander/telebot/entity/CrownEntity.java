@@ -23,10 +23,10 @@ public class CrownEntity {
     @SequenceGenerator(name = "crown_seq", sequenceName = "crown_sequence", allocationSize = 1)
     private Long id;
     private String territory;
-    private Long confirmedToday;
-    private Long deathsToday;
-    private Long recoveriesToday;
-    private Long confirmedYesterday;
-    private Long deathsYesterday;
-    private Long recoveriesYesterday;
+    private Integer confirmedToday;
+    private Integer deathsToday;
+    private Integer recoveriesToday;
+    private Integer confirmedYesterday;
+    private Integer deathsYesterday;
+    private Integer recoveriesYesterday;
 }
