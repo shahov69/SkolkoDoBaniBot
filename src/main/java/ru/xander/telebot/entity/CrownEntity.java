@@ -29,4 +29,6 @@ public class CrownEntity {
     private Integer confirmedYesterday;
     private Integer deathsYesterday;
     private Integer recoveriesYesterday;
+    private Boolean today;
+    private byte[] flag;
 }

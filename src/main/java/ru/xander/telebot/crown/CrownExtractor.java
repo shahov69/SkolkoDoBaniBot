@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 import ru.xander.telebot.util.Utils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,7 +23,6 @@ public class CrownExtractor {
     //    private static final String DATASOURCE = "https://en.wikipedia.org/wiki/2019%E2%80%9320_Wuhan_coronavirus_outbreak_by_country_and_territory";
     private static final String DATASOURCE = "https://en.wikipedia.org/wiki/2019%E2%80%9320_Wuhan_coronavirus_outbreak";
     private static final int TIMEOUT_MILLIS = 10000;
-    private final ConcurrentHashMap<String, Image> flagsCache = new ConcurrentHashMap<>();
 
     private FlagExtractor flagExtractor;
 
@@ -145,12 +144,14 @@ public class CrownExtractor {
     }
 
     interface FlagExtractor {
-        Image extractFlag(Element flagElement) throws IOException;
+        BufferedImage extractFlag(Element flagElement) throws IOException;
     }
 
-    private class FlagExtractorImpl implements FlagExtractor {
+    private static class FlagExtractorImpl implements FlagExtractor {
+        private final ConcurrentHashMap<String, BufferedImage> flagsCache = new ConcurrentHashMap<>();
+
         @Override
-        public Image extractFlag(Element flagElement) throws IOException {
+        public BufferedImage extractFlag(Element flagElement) throws IOException {
             if (flagElement != null) {
                 String imgUrl = flagElement.attr("src");
                 if (imgUrl.startsWith("//")) {
@@ -159,7 +160,7 @@ public class CrownExtractor {
                 if (flagsCache.containsKey(imgUrl)) {
                     return flagsCache.get(imgUrl);
                 } else {
-                    Image flag = ImageIO.read(new URL(imgUrl).openStream());
+                    BufferedImage flag = ImageIO.read(new URL(imgUrl).openStream());
                     flagsCache.put(imgUrl, flag);
                     return flag;
                 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
@@ -59,7 +59,7 @@ public class Crown {
     @Setter
     @ToString
     public static class Region {
-        private Image flag;
+        private BufferedImage flag;
         private String name;
         private Integer confirmed;
         private Integer deaths;

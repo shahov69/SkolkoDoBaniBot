@@ -1,14 +1,22 @@
 package ru.xander.telebot.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.xander.telebot.crown.Crown;
+import ru.xander.telebot.crown.CrownInfo;
+import ru.xander.telebot.crown.TerritoryInfo;
 import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.CrownEntity;
 import ru.xander.telebot.repository.CrownRepo;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +25,7 @@ import java.util.stream.Collectors;
  * @author Alexander Shakhov
  */
 @Service
+@Slf4j
 public class CrownService {
 
     private final CrownRepo crownRepo;
@@ -40,17 +49,20 @@ public class CrownService {
             if (crownEntity == null) {
                 crownEntity = new CrownEntity();
                 crownEntity.setTerritory(region.getName());
-                crownEntity.setConfirmedToday(region.getConfirmed());
-                crownEntity.setDeathsToday(region.getDeaths());
-                crownEntity.setRecoveriesToday(region.getRecoveries());
+                crownEntity.setConfirmedToday(region.getConfirmed() == null ? 0 : region.getConfirmed());
+                crownEntity.setDeathsToday(region.getDeaths() == null ? 0 : region.getDeaths());
+                crownEntity.setRecoveriesToday(region.getRecoveries() == null ? 0 : region.getRecoveries());
                 crownEntity.setConfirmedYesterday(0);
                 crownEntity.setDeathsYesterday(0);
                 crownEntity.setRecoveriesYesterday(0);
+                crownEntity.setFlag(imageToByteArray(region.getFlag()));
+                crownEntity.setToday(true);
             } else {
                 if (updateYesterday) {
                     crownEntity.setConfirmedYesterday(crownEntity.getConfirmedToday());
                     crownEntity.setDeathsYesterday(crownEntity.getDeathsToday());
                     crownEntity.setRecoveriesYesterday(crownEntity.getRecoveriesToday());
+                    crownEntity.setToday(false);
                 }
                 crownEntity.setConfirmedToday(region.getConfirmed());
                 crownEntity.setDeathsToday(region.getDeaths());
@@ -64,5 +76,51 @@ public class CrownService {
         crownEntities.values().stream().filter(c -> !regions.contains(c.getTerritory())).forEach(crownRepo::delete);
 
         settingService.saveParam(SettingName.CROWN_DAY.name(), now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
+
+    public CrownInfo getCrownInfo() {
+        List<TerritoryInfo> territories = new ArrayList<>();
+        List<CrownEntity> crownEntities = crownRepo.findAll();
+        for (CrownEntity crownEntity : crownEntities) {
+            TerritoryInfo territory = new TerritoryInfo();
+            territory.setName(crownEntity.getTerritory());
+            territory.setFlag(byteArrayToImage(crownEntity.getFlag()));
+            territory.setConfirmed(crownEntity.getConfirmedToday());
+            territory.setDeaths(crownEntity.getDeathsToday());
+            territory.setRecoveries(crownEntity.getRecoveriesToday());
+            territory.setConfirmedYesterday(crownEntity.getConfirmedYesterday());
+            territory.setDeathsYesterday(crownEntity.getDeathsYesterday());
+            territory.setRecoveriesYesterday(crownEntity.getRecoveriesYesterday());
+            territory.setToday(crownEntity.getToday());
+            territories.add(territory);
+        }
+        return new CrownInfo(territories);
+    }
+
+    private byte[] imageToByteArray(BufferedImage image) {
+        if (image == null) {
+            return null;
+        }
+        try {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "PNG", output);
+            return output.toByteArray();
+        } catch (Exception e) {
+            log.warn("Cannot convert image to byte array: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    private BufferedImage byteArrayToImage(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
+        try {
+            ByteArrayInputStream input = new ByteArrayInputStream(bytes);
+            return ImageIO.read(input);
+        } catch (Exception e) {
+            log.warn("Cannot convert byte array to image: {}", e.getMessage());
+            return null;
+        }
     }
 }

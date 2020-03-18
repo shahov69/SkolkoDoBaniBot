@@ -1,5 +1,6 @@
 package ru.xander.telebot.repository;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.xander.telebot.entity.CrownEntity;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Alexander Shakhov
@@ -23,12 +27,16 @@ public class CrownRepoTest {
     private CrownRepo crownRepo;
 
     @Test
-    public void save() {
+    public void save() throws IOException {
+        InputStream flag = getClass().getResourceAsStream("/flag.png");
+
         CrownEntity entity = new CrownEntity();
         entity.setTerritory("Test");
         entity.setConfirmedToday(123);
         entity.setDeathsToday(10);
         entity.setRecoveriesToday(40);
+        entity.setToday(true);
+        entity.setFlag(IOUtils.toByteArray(flag));
 
         CrownEntity saved = crownRepo.save(entity);
         Assert.assertNotNull(saved);
