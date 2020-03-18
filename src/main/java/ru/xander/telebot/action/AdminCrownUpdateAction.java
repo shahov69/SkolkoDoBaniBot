@@ -24,6 +24,7 @@ public class AdminCrownUpdateAction implements Action {
     public void execute(Request request, Sender sender) {
         if (request.isBotChat()) {
             crownService.update(new CrownExtractor().extract());
+            sender.sendText(request.getBotChatId(), "информация по короне обновлена");
         }
     }
 }

@@ -236,7 +236,7 @@ public class CrownRenderer {
     }
 
     private static String signed(int value) {
-        return value >= 0 ? "+" + value : "–" + value;
+        return value >= 0 ? "+" + value : "–" + Math.abs(value);
     }
 
     /**
