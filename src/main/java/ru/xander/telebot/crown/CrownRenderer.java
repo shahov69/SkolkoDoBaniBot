@@ -19,13 +19,21 @@ public class CrownRenderer {
     public static final int DEFAULT_CROWN_LIMIT = 50;
     private static final DecimalFormat format;
     private static final int rowHeight = 22;
-    private static final int[] cols = {0, 50, 225, 300, 375, 450, 525};
+    private static final int[] cols;
 
     static {
         format = new DecimalFormat("#,###");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
         symbols.setGroupingSeparator(' ');
         format.setDecimalFormatSymbols(symbols);
+        cols = new int[7];
+        cols[0] = 0;
+        cols[1] = cols[0] + 50;
+        cols[2] = cols[1] + 175;
+        cols[3] = cols[2] + 75;
+        cols[4] = cols[3] + 75;
+        cols[5] = cols[4] + 75;
+        cols[6] = cols[5] + 75;
     }
 
     private int visibleRows = DEFAULT_CROWN_LIMIT;
@@ -97,7 +105,7 @@ public class CrownRenderer {
             drawText(graphics, formatInteger(region.getConfirmed(), true), cols[2], cols[3], rowY, Alignment.RIGHT);
             drawText(graphics, formatInteger(region.getDeaths(), true), cols[3], cols[4], rowY, Alignment.RIGHT);
             drawText(graphics, formatInteger(region.getRecoveries(), true), cols[4], cols[5], rowY, Alignment.RIGHT);
-            drawText(graphics, formatInteger(region.getSick(), true), cols[5], cols[6], rowY, Alignment.RIGHT);
+            drawText(graphics, formatInteger(region.getSick(), false), cols[5], cols[6], rowY, Alignment.RIGHT);
             startRow++;
         }
     }

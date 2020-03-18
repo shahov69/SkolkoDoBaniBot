@@ -25,6 +25,15 @@ public class CrownExtractor {
     private static final int TIMEOUT_MILLIS = 10000;
     private final ConcurrentHashMap<String, Image> flagsCache = new ConcurrentHashMap<>();
 
+    private FlagExtractor flagExtractor;
+
+    /**
+     * Метод для тестов
+     */
+    void setFlagExtractor(FlagExtractor flagExtractor) {
+        this.flagExtractor = flagExtractor;
+    }
+
     public Crown extract() {
         try {
             Document document = Jsoup.parse(new URL(DATASOURCE), TIMEOUT_MILLIS);
@@ -45,6 +54,9 @@ public class CrownExtractor {
 
     public Crown extract(Document document) {
         try {
+            if (flagExtractor == null) {
+                flagExtractor = new FlagExtractorImpl();
+            }
             Crown crown = new Crown();
             List<Crown.Region> regions = new ArrayList<>();
             Element table = document.getElementsByAttributeValueStarting("class", "wikitable").first();
@@ -68,7 +80,7 @@ public class CrownExtractor {
                                 // скипаем территорию без флага
                                 break;
                             }
-                            region.setFlag(getFlag(flagElement));
+                            region.setFlag(flagExtractor.extractFlag(flagElement));
                         } else if (item == 1) {
                             region.setName(getName(td));
                         } else if (item == 2) {
@@ -116,23 +128,6 @@ public class CrownExtractor {
         return name;
     }
 
-    private Image getFlag(Element flagElement) throws IOException {
-        if (flagElement != null) {
-            String imgUrl = flagElement.attr("src");
-            if (imgUrl.startsWith("//")) {
-                imgUrl = "https:" + imgUrl;
-            }
-            if (flagsCache.containsKey(imgUrl)) {
-                return flagsCache.get(imgUrl);
-            } else {
-                Image flag = ImageIO.read(new URL(imgUrl).openStream());
-                flagsCache.put(imgUrl, flag);
-                return flag;
-            }
-        }
-        return null;
-    }
-
     private static Integer parseInteger(Element td) {
         try {
             String value = td.text().replaceAll("[^\\d]", Utils.EMPTY_STRING).trim();
@@ -145,6 +140,30 @@ public class CrownExtractor {
             }
             return Integer.parseInt(value);
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    interface FlagExtractor {
+        Image extractFlag(Element flagElement) throws IOException;
+    }
+
+    private class FlagExtractorImpl implements FlagExtractor {
+        @Override
+        public Image extractFlag(Element flagElement) throws IOException {
+            if (flagElement != null) {
+                String imgUrl = flagElement.attr("src");
+                if (imgUrl.startsWith("//")) {
+                    imgUrl = "https:" + imgUrl;
+                }
+                if (flagsCache.containsKey(imgUrl)) {
+                    return flagsCache.get(imgUrl);
+                } else {
+                    Image flag = ImageIO.read(new URL(imgUrl).openStream());
+                    flagsCache.put(imgUrl, flag);
+                    return flag;
+                }
+            }
             return null;
         }
     }
