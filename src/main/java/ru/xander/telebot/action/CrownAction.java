@@ -34,7 +34,8 @@ public class CrownAction implements Action {
     @Override
     public void execute(Request request, Sender sender) {
         LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY);
-        if ((crownDay == null) || (crownDay.compareTo(LocalDate.now()) < 0)) {
+        LocalDate now = LocalDate.now(Utils.ZONE_ID_MOSCOW);
+        if ((crownDay == null) || (crownDay.compareTo(now) < 0)) {
             crownService.update(new CrownExtractor().extract());
         }
 

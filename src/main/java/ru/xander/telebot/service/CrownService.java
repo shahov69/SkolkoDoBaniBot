@@ -9,6 +9,7 @@ import ru.xander.telebot.crown.TerritoryInfo;
 import ru.xander.telebot.dto.SettingName;
 import ru.xander.telebot.entity.CrownEntity;
 import ru.xander.telebot.repository.CrownRepo;
+import ru.xander.telebot.util.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,7 +39,7 @@ public class CrownService {
 
     public void update(Crown crown) {
         LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY);
-        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now(Utils.ZONE_ID_MOSCOW);
         boolean updateYesterday = (crownDay != null) && (crownDay.compareTo(now) < 0);
 
         Map<String, CrownEntity> crownEntities = crownRepo.findAll().stream().collect(Collectors.toMap(CrownEntity::getTerritory, c -> c));

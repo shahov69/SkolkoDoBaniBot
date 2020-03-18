@@ -202,6 +202,7 @@ public class CrownRenderer {
                 cols[0], cols[6], height - 6, Alignment.LEFT);
 
         graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 12.0f));
+        graphics.setColor(Color.DARK_GRAY);
         drawText(graphics, signed(crown.getTotalTerritoriesDelta()), cols[1], cols[2], totalRowY, Alignment.RIGHT);
         drawText(graphics, signed(crown.getTotalConfirmedDelta()), cols[2], cols[3], totalRowY, Alignment.RIGHT);
         drawText(graphics, signed(crown.getTotalDeathsDelta()), cols[3], cols[4], totalRowY, Alignment.RIGHT);
