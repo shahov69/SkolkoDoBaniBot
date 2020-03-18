@@ -52,6 +52,7 @@ public class AdminSystemAction implements Action {
                     .append("/userinfo - информация о пользователях\n")
                     .append("/setusercity_{userId}_{cityId} - установить cityId для пользователя\n")
                     .append("/chatinfo - информация о банных чатах\n")
+                    .append("/crown_update - обновить информацию о короне\n")
                     .append("/happybyozday_test - тестировать стикеры для дня рождения бота\n")
                     .append("----\n")
                     .append("/ilya_acc_{id} - акцептировать илюшизм\n")

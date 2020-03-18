@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class CrownService {
     }
 
     public void update(Crown crown) {
-        LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY, "yyyy-MM-dd");
+        LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY);
         LocalDate now = LocalDate.now();
         boolean updateYesterday = (crownDay != null) && (crownDay.compareTo(now) < 0);
 
@@ -75,7 +74,7 @@ public class CrownService {
         List<String> regions = crown.getRegions().stream().map(Crown.Region::getName).collect(Collectors.toList());
         crownEntities.values().stream().filter(c -> !regions.contains(c.getTerritory())).forEach(crownRepo::delete);
 
-        settingService.saveParam(SettingName.CROWN_DAY.name(), now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        settingService.setLocalDate(SettingName.CROWN_DAY, now);
     }
 
     public CrownInfo getCrownInfo() {

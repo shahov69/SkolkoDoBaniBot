@@ -12,6 +12,7 @@ import ru.xander.telebot.util.BotException;
 import ru.xander.telebot.util.Utils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,12 +64,20 @@ public class SettingService {
         return Long.parseLong(value);
     }
 
-    public LocalDate getLocalDate(SettingName settingName, String format) {
+    public LocalDate getLocalDate(SettingName settingName) {
         String value = getString(settingName);
         if (StringUtils.isEmpty(value)) {
             return null;
         }
-        return Utils.parseLocalDate(value, format);
+        return Utils.parseLocalDate(value, "yyyy-MM-dd");
+    }
+
+    public void setLocalDate(SettingName settingName, LocalDate value) {
+        if (value == null) {
+            saveParam(settingName.name(), null);
+        } else {
+            saveParam(settingName.name(), value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        }
     }
 
     public <T> T getJson(SettingName settingName, Class<T> clazz) {

@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.xander.telebot.crown.Crown;
 import ru.xander.telebot.crown.CrownExtractor;
+import ru.xander.telebot.crown.CrownInfo;
 import ru.xander.telebot.crown.CrownRenderer;
 import ru.xander.telebot.dto.MessageMode;
 import ru.xander.telebot.sender.Sender;
 import ru.xander.telebot.sender.TelegramSender;
 import ru.xander.telebot.service.ActionService;
+import ru.xander.telebot.service.CrownService;
 import ru.xander.telebot.service.ForecastService;
 import ru.xander.telebot.service.NotifyService;
 import ru.xander.telebot.service.SearchService;
@@ -118,9 +121,16 @@ public class SkolkoDoBaniBot extends TelegramLongPollingBot {
         }
     }
 
+    @Autowired
+    private CrownService crownService;
+
     private String checkCrownService() {
         try {
-            new CrownRenderer().render(new CrownExtractor().extract(), 1);
+            CrownExtractor crownExtractor = new CrownExtractor();
+            Crown crown = crownExtractor.extract();
+            crownService.update(crown);
+            CrownInfo crownInfo = crownService.getCrownInfo();
+            new CrownRenderer().render(crownInfo, 1);
             return "✅";
         } catch (Exception e) {
             return "❌ " + e.getMessage();

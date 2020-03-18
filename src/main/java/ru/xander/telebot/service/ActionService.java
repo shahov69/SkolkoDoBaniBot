@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.xander.telebot.action.Action;
 import ru.xander.telebot.action.AdminChatInfoAction;
+import ru.xander.telebot.action.AdminCrownUpdateAction;
 import ru.xander.telebot.action.AdminDocumentAction;
 import ru.xander.telebot.action.AdminIlyaAction;
 import ru.xander.telebot.action.AdminKiryaAction;
@@ -135,6 +136,9 @@ public class ActionService {
         switch (actionName) {
             case "/chatinfo":
                 return actionMap.get(AdminChatInfoAction.class);
+            case "/crownupdate":
+            case "/crown_update":
+                return actionMap.get(AdminCrownUpdateAction.class);
             case "/happybyozday_test":
                 return actionMap.get(HappyBirthDayAction.class);
             case "/omen":
