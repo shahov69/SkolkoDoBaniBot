@@ -97,17 +97,6 @@ public class CrownExtractor {
                     }
                 }
             }
-            regions.sort((r1, r2) -> {
-                int compareConfirmed = Utils.compareInteger(r2.getConfirmed(), r1.getConfirmed());
-                if (compareConfirmed != 0) {
-                    return compareConfirmed;
-                }
-                int compareDeath = Utils.compareInteger(r2.getDeaths(), r1.getDeaths());
-                if (compareDeath != 0) {
-                    return compareDeath;
-                }
-                return Utils.compareInteger(r2.getRecoveries(), r1.getConfirmed());
-            });
             crown.setRegions(regions);
             return crown;
         } catch (Exception e) {

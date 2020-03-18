@@ -2,8 +2,15 @@ package ru.xander.telebot.crown;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.xander.telebot.service.CrownService;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,7 +18,16 @@ import java.io.IOException;
 /**
  * @author Alexander Shakhov
  */
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource("/application-test.properties")
+@ComponentScan(value = {"ru.xander.telebot.service"})
 public class CrownRendererTest {
+
+    @Autowired
+    private CrownService crownService;
+
     @Test
     public void calcRange() {
         assertRange(CrownRenderer.calcRange(10, 50, -1), 0, 10);
@@ -25,12 +41,9 @@ public class CrownRendererTest {
         assertRange(CrownRenderer.calcRange(70, 50, 100), 20, 70);
     }
 
-    @Ignore
     @Test
     public void render() throws IOException {
-        CrownExtractor crownExtractor = new CrownExtractor();
-        crownExtractor.setFlagExtractor(new TestFlagExtractor());
-        Crown crown = crownExtractor.extract(getClass().getResourceAsStream("/crown_test.htm"));
+        CrownInfo crown = crownService.getCrownInfo();
         System.out.println("Draw with offset 0");
         CrownRenderer renderer = new CrownRenderer();
         renderer.setVisibleRows(50);

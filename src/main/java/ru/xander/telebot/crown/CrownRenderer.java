@@ -29,11 +29,11 @@ public class CrownRenderer {
         cols = new int[7];
         cols[0] = 0;
         cols[1] = cols[0] + 50;
-        cols[2] = cols[1] + 175;
-        cols[3] = cols[2] + 75;
-        cols[4] = cols[3] + 75;
-        cols[5] = cols[4] + 75;
-        cols[6] = cols[5] + 75;
+        cols[2] = cols[1] + 205;
+        cols[3] = cols[2] + 110;
+        cols[4] = cols[3] + 110;
+        cols[5] = cols[4] + 110;
+        cols[6] = cols[5] + 110;
     }
 
     private int visibleRows = DEFAULT_CROWN_LIMIT;
@@ -42,7 +42,7 @@ public class CrownRenderer {
         this.visibleRows = Math.max(visibleRows, 10);
     }
 
-    public InputStream render(Crown crown, int offset) {
+    public InputStream render(CrownInfo crown, int offset) {
         try {
             final int totalTerritories = crown.getTotalTerritories();
             Range range = calcRange(totalTerritories, visibleRows, offset);
@@ -70,7 +70,7 @@ public class CrownRenderer {
         }
     }
 
-    private void drawCrownTable(Graphics2D graphics, Crown crown, int width, int height, Range range) {
+    private void drawCrownTable(Graphics2D graphics, CrownInfo crown, int width, int height, Range range) {
         drawCanvas(graphics, width, height);
         drawGrid(graphics, width, height);
         drawTitles(graphics, crown, height);
@@ -80,13 +80,15 @@ public class CrownRenderer {
 
         final int totalTerritories = crown.getTotalTerritories();
 
-        int startRow = 3;
+        final int startRow;
         if (range.start > 0) {
-            startRow += 1;
+            startRow = 4;
             int rowY = rowHeight * 3 - 5;
             for (int i = 1; i < cols.length; i++) {
                 drawText(graphics, "...", cols[i - 1], cols[i], rowY, Alignment.CENTER);
             }
+        } else {
+            startRow = 3;
         }
         if (range.end < (totalTerritories - 1)) {
             int rowY = height - rowHeight * 2 - 6;
@@ -95,18 +97,49 @@ public class CrownRenderer {
             }
         }
 
+        int currentRow = startRow;
         for (int row = range.start; row < range.end; row++) {
-            Crown.Region region = crown.getRegions().get(row);
+            TerritoryInfo territory = crown.getTerritories().get(row);
 
-            int rowY = startRow * rowHeight - 5;
+            int rowY = currentRow * rowHeight - 5;
             drawText(graphics, "" + (row + 1), cols[0], cols[1], rowY, Alignment.CENTER);
-            drawText(graphics, region.getName(), cols[1], cols[2], rowY, Alignment.LEFT);
-            graphics.drawImage(region.getFlag(), cols[2] - 26, rowY - 13, 23, 15, Color.WHITE, null);
-            drawText(graphics, formatInteger(region.getConfirmed(), true), cols[2], cols[3], rowY, Alignment.RIGHT);
-            drawText(graphics, formatInteger(region.getDeaths(), true), cols[3], cols[4], rowY, Alignment.RIGHT);
-            drawText(graphics, formatInteger(region.getRecoveries(), true), cols[4], cols[5], rowY, Alignment.RIGHT);
-            drawText(graphics, formatInteger(region.getSick(), false), cols[5], cols[6], rowY, Alignment.RIGHT);
-            startRow++;
+            drawText(graphics, territory.getName(), cols[1], cols[2], rowY, Alignment.LEFT);
+            graphics.drawImage(territory.getFlag(), cols[2] - 26, rowY - 13, 23, 15, Color.WHITE, null);
+
+            drawText(graphics, formatInteger(territory.getConfirmed(), true), cols[2], cols[3], rowY, Alignment.LEFT);
+            drawText(graphics, formatInteger(territory.getDeaths(), true), cols[3], cols[4], rowY, Alignment.LEFT);
+            drawText(graphics, formatInteger(territory.getRecoveries(), true), cols[4], cols[5], rowY, Alignment.LEFT);
+            drawText(graphics, formatInteger(territory.getSick(), false), cols[5], cols[6], rowY, Alignment.LEFT);
+
+            if (territory.isToday()) {
+                graphics.setColor(Color.BLUE);
+                drawText(graphics, "NEW", cols[1], cols[2] - 28, rowY, Alignment.RIGHT);
+                graphics.setColor(Color.BLACK);
+            }
+
+            currentRow++;
+        }
+
+        currentRow = startRow;
+        graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 12.0f));
+        graphics.setColor(Color.GRAY);
+
+        for (int row = range.start; row < range.end; row++) {
+            TerritoryInfo territory = crown.getTerritories().get(row);
+            int rowY = currentRow * rowHeight - 5;
+            if (territory.getConfirmedDelta() != 0) {
+                drawText(graphics, signed(territory.getConfirmedDelta()), cols[2], cols[3], rowY, Alignment.RIGHT);
+            }
+            if (territory.getDeathsDelta() != 0) {
+                drawText(graphics, signed(territory.getDeathsDelta()), cols[3], cols[4], rowY, Alignment.RIGHT);
+            }
+            if (territory.getRecoveriesDelta() != 0) {
+                drawText(graphics, signed(territory.getRecoveriesDelta()), cols[4], cols[5], rowY, Alignment.RIGHT);
+            }
+            if (territory.getSickDelta() != 0) {
+                drawText(graphics, signed(territory.getSickDelta()), cols[5], cols[6], rowY, Alignment.RIGHT);
+            }
+            currentRow++;
         }
     }
 
@@ -142,7 +175,7 @@ public class CrownRenderer {
         }
     }
 
-    private void drawTitles(Graphics2D graphics, Crown crown, int height) {
+    private void drawTitles(Graphics2D graphics, CrownInfo crown, int height) {
         graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 14.0f));
         graphics.setColor(Color.BLACK);
 
@@ -156,16 +189,24 @@ public class CrownRenderer {
 
         final int totalRowY = rowHeight + 17;
         drawText(graphics, "Всего", cols[0], cols[1], totalRowY, Alignment.LEFT);
+
         drawText(graphics, formatInteger(crown.getTotalTerritories(), false), cols[1], cols[2], totalRowY, Alignment.LEFT);
-        drawText(graphics, formatInteger(crown.getTotalConfirmed(), false), cols[2], cols[3], totalRowY, Alignment.RIGHT);
-        drawText(graphics, formatInteger(crown.getTotalDeaths(), false), cols[3], cols[4], totalRowY, Alignment.RIGHT);
-        drawText(graphics, formatInteger(crown.getTotalRecoveries(), false), cols[4], cols[5], totalRowY, Alignment.RIGHT);
-        drawText(graphics, formatInteger(crown.getTotalSick(), false), cols[5], cols[6], totalRowY, Alignment.RIGHT);
+        drawText(graphics, formatInteger(crown.getTotalConfirmed(), false), cols[2], cols[3], totalRowY, Alignment.LEFT);
+        drawText(graphics, formatInteger(crown.getTotalDeaths(), false), cols[3], cols[4], totalRowY, Alignment.LEFT);
+        drawText(graphics, formatInteger(crown.getTotalRecoveries(), false), cols[4], cols[5], totalRowY, Alignment.LEFT);
+        drawText(graphics, formatInteger(crown.getTotalSick(), false), cols[5], cols[6], totalRowY, Alignment.LEFT);
 
         drawText(graphics, String.format("Текущая смертность = %.2f%%", crown.getCurrentMortality()),
                 cols[0], cols[6], height - rowHeight - 6, Alignment.LEFT);
         drawText(graphics, String.format("Виртуальная смертность = %.2f%%", crown.getVirtualMortality()),
                 cols[0], cols[6], height - 6, Alignment.LEFT);
+
+        graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 12.0f));
+        drawText(graphics, signed(crown.getTotalTerritoriesDelta()), cols[1], cols[2], totalRowY, Alignment.RIGHT);
+        drawText(graphics, signed(crown.getTotalConfirmedDelta()), cols[2], cols[3], totalRowY, Alignment.RIGHT);
+        drawText(graphics, signed(crown.getTotalDeathsDelta()), cols[3], cols[4], totalRowY, Alignment.RIGHT);
+        drawText(graphics, signed(crown.getTotalRecoveriesDelta()), cols[4], cols[5], totalRowY, Alignment.RIGHT);
+        drawText(graphics, signed(crown.getTotalSickDelta()), cols[5], cols[6], totalRowY, Alignment.RIGHT);
     }
 
     private void drawText(Graphics2D graphics, String value, int x1, int x2, int y, Alignment alignment) {
@@ -192,6 +233,10 @@ public class CrownRenderer {
             return "";
         }
         return format.format(integer);
+    }
+
+    private static String signed(int value) {
+        return value >= 0 ? "+" + value : "–" + value;
     }
 
     /**

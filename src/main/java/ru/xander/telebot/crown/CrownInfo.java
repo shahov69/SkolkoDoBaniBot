@@ -1,6 +1,7 @@
 package ru.xander.telebot.crown;
 
 import lombok.Getter;
+import ru.xander.telebot.util.Utils;
 
 import java.util.List;
 import java.util.Objects;
@@ -63,5 +64,17 @@ public class CrownInfo {
 
         this.currentMortality = totalDeaths == 0 ? 0.0d : (totalDeaths / (double) (totalDeaths + totalRecoveries)) * 100.0d;
         this.virtualMortality = totalConfirmed == 0 ? 0.0d : (totalDeaths / (double) (totalConfirmed)) * 100.0d;
+
+        this.territories.sort((t1, t2) -> {
+            int compareConfirmed = Utils.compareInteger(t2.getConfirmed(), t1.getConfirmed());
+            if (compareConfirmed != 0) {
+                return compareConfirmed;
+            }
+            int compareDeath = Utils.compareInteger(t2.getDeaths(), t1.getDeaths());
+            if (compareDeath != 0) {
+                return compareDeath;
+            }
+            return Utils.compareInteger(t2.getRecoveries(), t1.getConfirmed());
+        });
     }
 }
