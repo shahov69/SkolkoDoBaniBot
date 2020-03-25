@@ -29,11 +29,11 @@ public class CrownRenderer {
         cols = new int[7];
         cols[0] = 0;
         cols[1] = cols[0] + 50;
-        cols[2] = cols[1] + 205;
-        cols[3] = cols[2] + 110;
-        cols[4] = cols[3] + 110;
-        cols[5] = cols[4] + 110;
-        cols[6] = cols[5] + 110;
+        cols[2] = cols[1] + 210;
+        cols[3] = cols[2] + 115;
+        cols[4] = cols[3] + 115;
+        cols[5] = cols[4] + 115;
+        cols[6] = cols[5] + 115;
     }
 
     private int visibleRows = DEFAULT_CROWN_LIMIT;

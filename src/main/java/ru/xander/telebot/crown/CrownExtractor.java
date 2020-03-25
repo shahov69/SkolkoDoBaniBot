@@ -110,8 +110,12 @@ public class CrownExtractor {
                 .replace("&nbsp;", " ")
                 .replaceAll("(\\[(.*?)\\]|\\((.*?)\\))", Utils.EMPTY_STRING)
                 .trim();
-        if (name.toUpperCase().contains("DIAMOND")) {
+        String upperedName = name.toUpperCase();
+        if (upperedName.contains("DIAMOND")) {
             return "Diamond Princess";
+        }
+        if (upperedName.contains("CHINA")) {
+            return "China";
         }
         return name;
     }
