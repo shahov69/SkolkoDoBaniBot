@@ -176,6 +176,7 @@ public class ActionService {
             case "/add_ilya":
                 return actionMap.get(IlyaAddAction.class);
             case "/crown":
+            case "/korona":
                 return actionMap.get(CrownAction.class);
             case "/dobro":
                 return actionMap.get(DobroAction.class);

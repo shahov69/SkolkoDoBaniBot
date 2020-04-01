@@ -33,19 +33,35 @@ public class CrownAction implements Action {
 
     @Override
     public void execute(Request request, Sender sender) {
-        LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY);
-        LocalDate now = LocalDate.now(Utils.ZONE_ID_MOSCOW);
-        if ((crownDay == null) || (crownDay.compareTo(now) < 0)) {
-            crownService.update(new CrownExtractor().extract());
+        int offset;
+        String[] args = request.getArgs();
+        if (args.length > 0) {
+            try {
+                offset = Integer.parseInt(args[0]);
+            } catch (Exception e) {
+                offset = 1;
+            }
         }
 
-        Integer crownLimit = settingService.getInt(SettingName.CROWN_LIMIT);
-        renderer.setVisibleRows(crownLimit == null ? CrownRenderer.DEFAULT_CROWN_LIMIT : crownLimit);
+        boolean toUpdate = false;
+        if (args.length > 1) {
+            toUpdate = "+".equals(args[1]);
+        }
 
-        int offset = getOffset(request);
+        LocalDate crownDay = settingService.getLocalDate(SettingName.CROWN_DAY);
+        LocalDate now = LocalDate.now(Utils.ZONE_ID_MOSCOW);
+        if ((crownDay == null) || (crownDay.compareTo(now) < 0) || toUpdate) {
+            crownService.update(new CrownExtractor().extract());
+            sender.sendText(request.getBotChatId(), "информация по короне обновлена");
+        }
+
+        offset = getOffset(request);
         String filename = "crown_" + Utils.formatDate(Utils.now(), "yyyyMMdd_hhmmss") + ".png";
 
         CrownInfo crown = crownService.getCrownInfo();
+
+        Integer crownLimit = settingService.getInt(SettingName.CROWN_LIMIT);
+        renderer.setVisibleRows(crownLimit == null ? CrownRenderer.DEFAULT_CROWN_LIMIT : crownLimit);
         InputStream crownRender = renderer.render(crown, offset);
         if (offset < 1) {
             sender.sendDocument(request.getChatId(), filename, crownRender);
