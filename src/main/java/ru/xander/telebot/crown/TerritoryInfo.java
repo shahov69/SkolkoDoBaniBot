@@ -45,4 +45,12 @@ public class TerritoryInfo {
     public int getSickDelta() {
         return getSick() - getSickYesterday();
     }
+
+    public double getCurrentMortality() {
+        return deaths == 0 ? 0.0d : (deaths / (double) (deaths + recoveries)) * 100.0d;
+    }
+
+    public double getVirtualMortality() {
+        return confirmed == 0 ? 0.0d : (deaths / (double) (confirmed)) * 100.0d;
+    }
 }

@@ -26,14 +26,16 @@ public class CrownRenderer {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
         symbols.setGroupingSeparator(' ');
         format.setDecimalFormatSymbols(symbols);
-        cols = new int[7];
+        cols = new int[9];
         cols[0] = 0;
         cols[1] = cols[0] + 50;
         cols[2] = cols[1] + 210;
-        cols[3] = cols[2] + 115;
-        cols[4] = cols[3] + 115;
-        cols[5] = cols[4] + 115;
-        cols[6] = cols[5] + 115;
+        cols[3] = cols[2] + 125;
+        cols[4] = cols[3] + 125;
+        cols[5] = cols[4] + 125;
+        cols[6] = cols[5] + 125;
+        cols[7] = cols[6] + 75;
+        cols[8] = cols[7] + 75;
     }
 
     private int visibleRows = DEFAULT_CROWN_LIMIT;
@@ -48,7 +50,7 @@ public class CrownRenderer {
             Range range = calcRange(totalTerritories, visibleRows, offset);
 
             final int rows = range.end - range.start
-                    + 4 // + 4 строки (заголовок, тотал, подписи внизу)
+                    + 2 // + 2 строки (заголовок, тотал)
                     + (range.start > 0 ? 1 : 0) // + 1 строка (многоточия сверху)
                     + (range.end < (totalTerritories - 1) ? 1 : 0); // + 1 строка (многоточия снизу)
 
@@ -91,7 +93,7 @@ public class CrownRenderer {
             startRow = 3;
         }
         if (range.end < (totalTerritories - 1)) {
-            int rowY = height - rowHeight * 2 - 6;
+            int rowY = height - 6;
             for (int i = 1; i < cols.length; i++) {
                 drawText(graphics, "...", cols[i - 1], cols[i], rowY, Alignment.CENTER);
             }
@@ -110,6 +112,8 @@ public class CrownRenderer {
             drawText(graphics, formatInteger(territory.getDeaths(), true), cols[3], cols[4], rowY, Alignment.LEFT);
             drawText(graphics, formatInteger(territory.getRecoveries(), true), cols[4], cols[5], rowY, Alignment.LEFT);
             drawText(graphics, formatInteger(territory.getSick(), false), cols[5], cols[6], rowY, Alignment.LEFT);
+            drawText(graphics, String.format("%.2f %%", territory.getCurrentMortality()), cols[6], cols[7], rowY, Alignment.RIGHT);
+            drawText(graphics, String.format("%.2f %%", territory.getVirtualMortality()), cols[7], cols[8], rowY, Alignment.RIGHT);
 
             if (territory.isToday()) {
                 graphics.setColor(Color.BLUE);
@@ -148,10 +152,9 @@ public class CrownRenderer {
         graphics.setColor(new Color(0xf8, 0xf9, 0xfa));
         graphics.fill(new Rectangle(0, 0, width, height));
 
-        // раскрашиваем служебные строки: 2 сверху и 2 снизу
+        // раскрашиваем служебные строки: 2 сверху
         graphics.setColor(new Color(0xea, 0xec, 0xf0));
         graphics.fill(new Rectangle(0, 0, width, rowHeight * 2 + 1));
-        graphics.fill(new Rectangle(0, height - rowHeight * 2 - 1, width, height));
     }
 
     private void drawGrid(Graphics2D graphics, int width, int height) {
@@ -160,18 +163,16 @@ public class CrownRenderer {
         // общая рамка
         graphics.drawRect(0, 0, width - 1, height - 1);
 
-        int lastRow = height - 2 * rowHeight;
-
         // горизонтальные линии
         int lineY = rowHeight;
-        while (lineY < lastRow) {
+        while (lineY < height) {
             graphics.drawLine(0, lineY, width, lineY);
             lineY += rowHeight;
         }
 
         // вертикальные линии
         for (int i = 1; i < (cols.length - 1); i++) {
-            graphics.drawLine(cols[i], 0, cols[i], lastRow - 2);
+            graphics.drawLine(cols[i], 0, cols[i], height);
         }
     }
 
@@ -186,6 +187,8 @@ public class CrownRenderer {
         drawText(graphics, "Умерло", cols[3], cols[4], titleRowY, Alignment.LEFT);
         drawText(graphics, "Вылечено", cols[4], cols[5], titleRowY, Alignment.LEFT);
         drawText(graphics, "Болеют", cols[5], cols[6], titleRowY, Alignment.LEFT);
+        drawText(graphics, "Тек.см-ть", cols[6], cols[7], titleRowY, Alignment.LEFT);
+        drawText(graphics, "Вирт.см-ть", cols[7], cols[8], titleRowY, Alignment.LEFT);
 
         final int totalRowY = rowHeight + 17;
         drawText(graphics, "Всего", cols[0], cols[1], totalRowY, Alignment.LEFT);
@@ -195,11 +198,8 @@ public class CrownRenderer {
         drawText(graphics, formatInteger(crown.getTotalDeaths(), false), cols[3], cols[4], totalRowY, Alignment.LEFT);
         drawText(graphics, formatInteger(crown.getTotalRecoveries(), false), cols[4], cols[5], totalRowY, Alignment.LEFT);
         drawText(graphics, formatInteger(crown.getTotalSick(), false), cols[5], cols[6], totalRowY, Alignment.LEFT);
-
-        drawText(graphics, String.format("Текущая смертность = %.2f%%", crown.getCurrentMortality()),
-                cols[0], cols[6], height - rowHeight - 6, Alignment.LEFT);
-        drawText(graphics, String.format("Виртуальная смертность = %.2f%%", crown.getVirtualMortality()),
-                cols[0], cols[6], height - 6, Alignment.LEFT);
+        drawText(graphics, String.format("%.2f %%", crown.getCurrentMortality()), cols[6], cols[7], totalRowY, Alignment.RIGHT);
+        drawText(graphics, String.format("%.2f %%", crown.getVirtualMortality()), cols[7], cols[8], totalRowY, Alignment.RIGHT);
 
         graphics.setFont(Fonts.NEWS_CYCLE.getMediumFont().deriveFont(Font.BOLD, 12.0f));
         graphics.setColor(Color.DARK_GRAY);
