@@ -46,11 +46,17 @@ public class TerritoryInfo {
         return getSick() - getSickYesterday();
     }
 
-    public double getCurrentMortality() {
-        return deaths == 0 ? 0.0d : (deaths / (double) (deaths + recoveries)) * 100.0d;
+    public String getCurrentMortality() {
+        if ((deaths == 0) || (recoveries == 0)) {
+            return "";
+        }
+        return String.format("%.2f %%", (deaths / (double) (deaths + recoveries)) * 100.0d);
     }
 
-    public double getVirtualMortality() {
-        return confirmed == 0 ? 0.0d : (deaths / (double) (confirmed)) * 100.0d;
+    public String getVirtualMortality() {
+        if ((confirmed == 0) || (deaths == 0)) {
+            return "";
+        }
+        return String.format("%.2f %%", (deaths / (double) (confirmed)) * 100.0d);
     }
 }

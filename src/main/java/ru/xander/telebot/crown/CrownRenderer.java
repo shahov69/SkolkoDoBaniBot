@@ -112,8 +112,8 @@ public class CrownRenderer {
             drawText(graphics, formatInteger(territory.getDeaths(), true), cols[3], cols[4], rowY, Alignment.LEFT);
             drawText(graphics, formatInteger(territory.getRecoveries(), true), cols[4], cols[5], rowY, Alignment.LEFT);
             drawText(graphics, formatInteger(territory.getSick(), false), cols[5], cols[6], rowY, Alignment.LEFT);
-            drawText(graphics, String.format("%.2f %%", territory.getCurrentMortality()), cols[6], cols[7], rowY, Alignment.RIGHT);
-            drawText(graphics, String.format("%.2f %%", territory.getVirtualMortality()), cols[7], cols[8], rowY, Alignment.RIGHT);
+            drawText(graphics, territory.getCurrentMortality(), cols[6], cols[7], rowY, Alignment.RIGHT);
+            drawText(graphics, territory.getVirtualMortality(), cols[7], cols[8], rowY, Alignment.RIGHT);
 
             if (territory.isToday()) {
                 graphics.setColor(Color.BLUE);
