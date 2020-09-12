@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import ru.xander.telebot.forecast.Forecast;
@@ -19,6 +20,7 @@ import java.io.InputStream;
  * @author Alexander Shakhov
  */
 @RunWith(SpringRunner.class)
+@TestPropertySource("/application-test.properties")
 @RestClientTest(ForecastService.class)
 public class ForecastServiceTest {
 

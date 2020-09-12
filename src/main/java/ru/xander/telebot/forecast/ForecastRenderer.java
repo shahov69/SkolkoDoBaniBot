@@ -32,7 +32,6 @@ public class ForecastRenderer {
     private static final int HEIGHT = 218;
     private static final int HORZ_MID = (int) (WIDTH / 2.0d) - 5;
 
-    private static final DateTimeFormatter MMDD = DateTimeFormatter.ofPattern("MMDD");
     private static final DateTimeFormatter HH_MM = DateTimeFormatter.ofPattern("HH:mm");
 
     public InputStream render(Forecast forecast) {
@@ -141,9 +140,9 @@ public class ForecastRenderer {
     }
 
     private DailyForecast getDailyForecast(Forecast forecast) {
-        final String now = LocalDateTime.now(Utils.ZONE_ID_MOSCOW).format(MMDD);
+        final Integer now = getMMDD(LocalDateTime.now(Utils.ZONE_ID_MOSCOW));
         for (DailyForecast dailyForecast : forecast.getDailyForecasts()) {
-            String date = dailyForecast.getDate().format(MMDD);
+            Integer date = getMMDD(dailyForecast.getDate());
             if (date.equals(now)) {
                 return dailyForecast;
             }
@@ -229,5 +228,7 @@ public class ForecastRenderer {
         return uvIndex.map(airAndPollen -> airAndPollen.getCategoryValue() + " " + airAndPollen.getCategory()).orElse("");
     }
 
-
+    private static Integer getMMDD(LocalDateTime dateTime) {
+        return dateTime.getMonthValue() * 100 + dateTime.getDayOfMonth();
+    }
 }
